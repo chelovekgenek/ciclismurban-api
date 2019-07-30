@@ -1,10 +1,11 @@
 import { Module, NestModule, MiddlewareConsumer } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 
-import { LoggerModule, LoggerMiddleware } from "./logger"
+import { LoggerMiddleware, LoggerModule } from "./logger"
+import { LocationModule } from "./location"
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), LoggerModule],
+  imports: [TypeOrmModule.forRoot(), LoggerModule, LocationModule],
 })
 export class ApplicationModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

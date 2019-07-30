@@ -1,6 +1,7 @@
 import { Connection, EntityRepository, MongoRepository } from "typeorm"
 
 import { RepositoryProvider } from "modules/commons"
+
 import { User } from "./entities"
 
 @EntityRepository(User)
