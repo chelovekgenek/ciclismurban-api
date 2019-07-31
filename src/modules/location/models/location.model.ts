@@ -1,5 +1,5 @@
 import { Expose, Type } from "class-transformer"
-import { ValidateNested } from "class-validator"
+import { ValidateNested, IsString, IsUrl } from "class-validator"
 
 import { ILocation, IPoint } from "../interfaces"
 import { PointModel } from "./point.model"
@@ -13,18 +13,21 @@ export class LocationModel implements ILocation {
   @Expose({ groups: [ExposeGroup.READ] })
   uuid: string
 
-  @Expose({ groups: [ExposeGroup.READ] })
+  @Expose({ groups: [ExposeGroup.READ, ExposeGroup.WRITE] })
+  @IsString({ always: true })
   title: string
 
-  @Expose({ groups: [ExposeGroup.READ] })
+  @Expose({ groups: [ExposeGroup.READ, ExposeGroup.WRITE] })
+  @IsString({ always: true })
   description: string
 
-  @Expose({ groups: [ExposeGroup.READ] })
+  @Expose({ groups: [ExposeGroup.READ, ExposeGroup.WRITE] })
+  @IsUrl({}, { always: true })
   image: string
 
-  @Expose({ groups: [ExposeGroup.READ] })
+  @Expose({ groups: [ExposeGroup.READ, ExposeGroup.WRITE] })
   @Type(() => PointModel)
-  @ValidateNested()
+  @ValidateNested({ always: true })
   point: IPoint
 
   @Expose({ groups: [ExposeGroup.READ] })
