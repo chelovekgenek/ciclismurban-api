@@ -1,14 +1,26 @@
 {
-  "name": "ciclismurban-api",
-  "version": "0.0.1",
+  "name": "@ciclismurban/api",
+  "version": "1.0.5",
   "description": "",
-  "author": "",
+  "author": "Evghenii Notarius",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chelovekgenek/ciclismurban-api"
+  },
+  "private": false,
   "scripts": {
     "start": "ts-node -r tsconfig-paths/register src/main.ts",
     "watch": "nodemon -V",
-    "build": "rimraf dist && tsc -p tsconfig.json"
+    "build": "rimraf dist && tsc -p tsconfig.json",
+    "postinstall": "yarn build"
   },
+  "files": [
+    "tsconfig.json",
+    "src/**/interfaces/*",
+    "src/**/models/*",
+    "src/modules/commons/helpers/validator.ts"
+  ],
   "dependencies": {
     "@moebius/http-graceful-shutdown": "^1.1.0",
     "@nestjs/common": "^6.0.0",
