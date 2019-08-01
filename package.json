@@ -40,7 +40,7 @@
     "ts-node": "8.1.0",
     "tsconfig-paths": "^3.8.0",
     "typeorm": "^0.2.18",
-    "typescript": "3.4.3",
+    "typescript": "^3.5.3",
     "url-join": "^4.0.0",
     "uuid": "^3.3.2",
     "winston": "^3.2.1"
