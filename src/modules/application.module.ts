@@ -3,9 +3,10 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 
 import { LoggerMiddleware, LoggerModule } from "./logger"
 import { LocationModule } from "./location"
+import { UserModule } from "./user"
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), LoggerModule, LocationModule],
+  imports: [TypeOrmModule.forRoot(), LoggerModule, LocationModule, UserModule],
 })
 export class ApplicationModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

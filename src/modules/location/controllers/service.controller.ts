@@ -16,7 +16,7 @@ export class ServiceController {
   @Get()
   @ApiOperation({ title: "Get service locations" })
   @ApiResponse({ status: HttpStatus.OK, description: "OK", type: Service, isArray: true })
-  @TransformClassToPlain({ groups: [ExposeGroup.READ], excludeExtraneousValues: true })
+  @TransformClassToPlain({ groups: [ExposeGroup.READ] })
   async getServices(): Promise<Service[]> {
     return this.serviceRepository.find()
   }
@@ -26,7 +26,7 @@ export class ServiceController {
   @ApiResponse({ status: HttpStatus.OK, description: "OK", type: Service })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: "Entity not found" })
   @ApiImplicitParam({ name: "id", type: String })
-  @TransformClassToPlain({ groups: [ExposeGroup.READ], excludeExtraneousValues: true })
+  @TransformClassToPlain({ groups: [ExposeGroup.READ] })
   async getParking(@Param("id") uuid): Promise<Service> {
     return this.serviceRepository.findOneOrFail({ uuid })
   }
@@ -36,7 +36,7 @@ export class ServiceController {
   @ApiResponse({ status: HttpStatus.CREATED, description: "Ok", type: Service })
   @ApiResponse({ status: HttpStatus.UNPROCESSABLE_ENTITY, description: "Validation error" })
   @ApiImplicitBody({ name: "Payload", type: Service })
-  @TransformClassToPlain({ groups: [ExposeGroup.READ], excludeExtraneousValues: true })
+  @TransformClassToPlain({ groups: [ExposeGroup.READ] })
   async createService(
     @Body(getValidateAndTransformPipe([ExposeGroup.WRITE], Service)) data: Service,
   ): Promise<Service> {

@@ -4,7 +4,6 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { Parking, Service, Shop } from "./entities"
 import { ParkingRepositoryProvider, ServiceRepositoryProvider, ShopRepositoryProvider } from "./repositories"
 import { ParkingSubscriber, ServiceSubscriber, ShopSubscriber } from "./subscribers"
-import { LocationService } from "./location.service"
 import { ParkingController, ServiceController, ShopController } from "./controllers"
 
 @Module({
@@ -16,7 +15,6 @@ import { ParkingController, ServiceController, ShopController } from "./controll
     ParkingSubscriber,
     ServiceSubscriber,
     ShopSubscriber,
-    LocationService,
   ],
   controllers: [ParkingController, ServiceController, ShopController],
 })
