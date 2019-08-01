@@ -5,7 +5,7 @@ import { Parking, Service, Shop } from "./entities"
 import { ParkingRepositoryProvider, ServiceRepositoryProvider, ShopRepositoryProvider } from "./repositories"
 import { ParkingSubscriber, ServiceSubscriber, ShopSubscriber } from "./subscribers"
 import { LocationService } from "./location.service"
-import { LocationController } from "./location.controller"
+import { ParkingController, ServiceController, ShopController } from "./controllers"
 
 @Module({
   imports: [TypeOrmModule.forFeature([Parking, Service, Shop])],
@@ -18,6 +18,6 @@ import { LocationController } from "./location.controller"
     ShopSubscriber,
     LocationService,
   ],
-  controllers: [LocationController],
+  controllers: [ParkingController, ServiceController, ShopController],
 })
 export class LocationModule {}
