@@ -4,6 +4,8 @@ import { GracefulShutdownManager } from "@moebius/http-graceful-shutdown"
 
 import { Config } from "./modules/commons"
 
+import packageJson from "../package.json"
+
 export async function appBootstrap(app: INestApplication, logger: LoggerService): Promise<INestApplication> {
   bootstrapSwagger(app)
 
@@ -23,7 +25,7 @@ function bootstrapSwagger(app: INestApplication) {
     const options = new DocumentBuilder()
       .setTitle("Ciclismurban")
       .setDescription("Ciclismurban API description")
-      .setVersion("1.0")
+      .setVersion(packageJson.version)
       .setSchemes(Config.get("SWAGGER_SCHEME", "http") as "http" | "https")
       .build()
 
