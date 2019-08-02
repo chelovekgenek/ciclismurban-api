@@ -4,6 +4,7 @@ export interface IPoint {
 }
 
 export interface ILocation {
+  uuid: string
   title: string
   description: string
   image: string
