@@ -1,6 +1,6 @@
 {
   "name": "@ciclismurban/api",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "",
   "author": "Evghenii Notarius",
   "license": "MIT",
@@ -13,7 +13,7 @@
     "start": "ts-node -r tsconfig-paths/register src/main.ts",
     "watch": "nodemon -V",
     "build": "rimraf dist && tsc -p tsconfig.json",
-    "postinstall": "yarn build",
+    "prepublishOnly": "yarn build",
     "release": "standard-version"
   },
   "dependencies": {
