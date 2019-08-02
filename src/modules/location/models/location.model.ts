@@ -1,7 +1,6 @@
 import { Expose, Type } from "class-transformer"
 import { ValidateNested, IsString, IsUrl } from "class-validator"
 
-import { ILocation, IPoint } from "../interfaces"
 import { PointModel } from "./point.model"
 
 export enum ExposeGroup {
@@ -9,7 +8,7 @@ export enum ExposeGroup {
   WRITE = "write",
 }
 
-export class LocationModel implements ILocation {
+export class LocationModel {
   @Expose({ groups: [ExposeGroup.READ] })
   uuid: string
 
@@ -28,7 +27,7 @@ export class LocationModel implements ILocation {
   @Expose({ groups: [ExposeGroup.READ, ExposeGroup.WRITE] })
   @Type(() => PointModel)
   @ValidateNested({ always: true })
-  point: IPoint
+  point: PointModel
 
   @Expose({ groups: [ExposeGroup.READ] })
   createdAt: Date

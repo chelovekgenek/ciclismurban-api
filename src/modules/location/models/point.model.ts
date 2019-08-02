@@ -1,8 +1,7 @@
-import { IPoint } from "../interfaces"
 import { Expose } from "class-transformer"
 import { IsNumber } from "class-validator"
 
-export class PointModel implements IPoint {
+export class PointModel {
   @Expose()
   @IsNumber({}, { always: true })
   lat: number

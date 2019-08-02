@@ -5,6 +5,4 @@
 !dist/**/models/*
 !dist/**/*.model.*
 
-!dist/**/interfaces/*
-!dist/**/*.interface.*
 !dist/**/commons/helpers/validator.*

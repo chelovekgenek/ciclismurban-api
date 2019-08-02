@@ -9,7 +9,7 @@ export enum ExposeGroup {
 
 export class UserModel {
   @Expose({ groups: [ExposeGroup.READ] })
-  uuid?: string
+  uuid: string
 
   @Expose({ groups: [ExposeGroup.READ, ExposeGroup.WRITE, ExposeGroup.LOGIN] })
   @IsEmail({}, { always: true })
@@ -17,12 +17,12 @@ export class UserModel {
 
   @Expose({ groups: [ExposeGroup.WRITE, ExposeGroup.LOGIN] })
   @IsString({ always: true })
-  @Length(8, 16, { groups: [ExposeGroup.WRITE] })
+  @Length(8, 16, { always: true })
   password: string
 
   @Expose({ groups: [ExposeGroup.READ] })
-  createdAt?: Date
+  createdAt: Date
 
   @Expose({ groups: [ExposeGroup.READ] })
-  updatedAt?: Date
+  updatedAt: Date
 }
