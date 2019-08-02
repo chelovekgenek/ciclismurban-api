@@ -1,6 +1,6 @@
 {
   "name": "@ciclismurban/api",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "",
   "author": "Evghenii Notarius",
   "license": "MIT",
@@ -13,14 +13,9 @@
     "start": "ts-node -r tsconfig-paths/register src/main.ts",
     "watch": "nodemon -V",
     "build": "rimraf dist && tsc -p tsconfig.json",
-    "postinstall": "yarn build"
+    "postinstall": "yarn build",
+    "release": "standard-version"
   },
-  "files": [
-    "tsconfig.json",
-    "src/**/interfaces/*",
-    "src/**/models/*",
-    "src/modules/commons/helpers/validator.ts"
-  ],
   "dependencies": {
     "@moebius/http-graceful-shutdown": "^1.1.0",
     "@nestjs/common": "^6.0.0",
@@ -62,13 +57,14 @@
     "lint-staged": "^8.2.0",
     "nodemon": "^1.19.1",
     "prettier": "^1.15.3",
+    "standard-version": "^7.0.0",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0"
   },
   "lint-staged": {
     "{*.ts}": [
       "tslint -p tsconfig.json -c tslint.json",
-      "prettier --write \"src/**/*.ts\"",
+      "prettier --write \"src/*",
       "git add"
     ]
   },
