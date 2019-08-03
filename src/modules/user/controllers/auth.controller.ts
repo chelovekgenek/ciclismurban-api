@@ -2,7 +2,7 @@ import { Controller, HttpStatus, HttpCode, Post, Body } from "@nestjs/common"
 import { ApiUseTags, ApiOperation, ApiResponse, ApiImplicitBody, ApiImplicitHeader } from "@nestjs/swagger"
 import { TransformClassToPlain } from "class-transformer"
 
-import { getValidateAndTransformPipe, Token } from "modules/commons"
+import { getValidateAndTransformPipe as pipe, getResponseOptions as options, Token } from "modules/commons"
 
 import { AuthService } from "../services"
 import { AuthResponseDto } from "../dto"
@@ -20,7 +20,7 @@ export class AuthController {
   @ApiResponse({ status: HttpStatus.OK, description: "OK", type: AuthResponseDto })
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "Jwt malformed" })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @TransformClassToPlain({ groups: [ExposeGroup.READ] })
+  @TransformClassToPlain(options([ExposeGroup.READ]))
   async loginByToken(@Token() token: string): Promise<AuthResponseDto> {
     return this.authService.loginByToken(token)
   }
@@ -32,9 +32,14 @@ export class AuthController {
   @ApiResponse({ status: HttpStatus.UNPROCESSABLE_ENTITY, description: "Validation error" })
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "Credentials is not valid" })
   @ApiImplicitBody({ name: "Auth body", type: User })
-  @TransformClassToPlain({ groups: [ExposeGroup.READ] })
+  @TransformClassToPlain(options([ExposeGroup.READ]))
   async login(
-    @Body(getValidateAndTransformPipe([ExposeGroup.LOGIN], User))
+    @Body(
+      pipe(
+        [ExposeGroup.LOGIN],
+        User,
+      ),
+    )
     data: User,
   ): Promise<AuthResponseDto> {
     return this.authService.login(data)
@@ -47,9 +52,14 @@ export class AuthController {
   @ApiResponse({ status: HttpStatus.UNPROCESSABLE_ENTITY, description: "Validation error" })
   @ApiResponse({ status: HttpStatus.CONFLICT, description: "Duplicate key" })
   @ApiImplicitBody({ name: "Auth body", type: User })
-  @TransformClassToPlain({ groups: [ExposeGroup.READ] })
+  @TransformClassToPlain(options([ExposeGroup.READ]))
   async register(
-    @Body(getValidateAndTransformPipe([ExposeGroup.WRITE], User))
+    @Body(
+      pipe(
+        [ExposeGroup.WRITE],
+        User,
+      ),
+    )
     data: User,
   ): Promise<AuthResponseDto> {
     return this.authService.register(data)

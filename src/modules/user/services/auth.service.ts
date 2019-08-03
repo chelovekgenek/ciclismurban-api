@@ -21,7 +21,7 @@ export class AuthService {
         throw new Error("Password not match")
       }
 
-      return this.prepareResponse(user)
+      return this.response(user)
     } catch (e) {
       throw new UnauthorizedException(e.message, e)
     }
@@ -30,24 +30,24 @@ export class AuthService {
   async loginByToken(token: string): Promise<AuthResponseDto> {
     const payload = this.verifyToken(token)
     const user = await this.validatePayload(payload)
-    return this.prepareResponse(user)
+    return this.response(user)
   }
 
   async register(data: User): Promise<AuthResponseDto> {
     try {
       const user = await this.userService.create(data)
-      return this.prepareResponse(user)
+      return this.response(user)
     } catch (e) {
       throw new ConflictException(e.message, e)
     }
   }
 
-  async prepareResponse(user: User): Promise<AuthResponseDto> {
+  async response(user: User): Promise<AuthResponseDto> {
     return plainToClass(
       AuthResponseDto,
       {
         token: this.jwtService.sign({ uuid: user.uuid }),
-        user,
+        data: user,
       },
       { groups: [ExposeGroup.READ] },
     )
