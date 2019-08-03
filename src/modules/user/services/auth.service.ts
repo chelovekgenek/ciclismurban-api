@@ -38,7 +38,7 @@ export class AuthService {
       const user = await this.userService.create(data)
       return this.prepareResponse(user)
     } catch (e) {
-      throw new ConflictException(e.message)
+      throw new ConflictException(e.message, e)
     }
   }
 
@@ -57,7 +57,7 @@ export class AuthService {
     try {
       return this.jwtService.verify(token)
     } catch (e) {
-      throw new UnauthorizedException(e.message)
+      throw new UnauthorizedException(e.message, e)
     }
   }
 
