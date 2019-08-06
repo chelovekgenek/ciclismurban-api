@@ -1,4 +1,4 @@
-import { Injectable, UnprocessableEntityException } from "@nestjs/common"
+import { Injectable, BadRequestException } from "@nestjs/common"
 import path from "path"
 
 import { S3Service } from "./s3.service"
@@ -12,7 +12,7 @@ export class FileService {
     return (req, file, callback) => {
       const ext = path.extname(file.originalname)
       if (!extensions.includes(ext)) {
-        return callback(new UnprocessableEntityException(`Allowed extensions: ${extensions.join(",")}.`), false)
+        return callback(new BadRequestException(`Allowed extensions: ${extensions.join(",")}.`), false)
       }
       callback(null, true)
     }

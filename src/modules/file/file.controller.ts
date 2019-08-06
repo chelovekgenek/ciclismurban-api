@@ -13,7 +13,7 @@ export class FileController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ title: "Upload file" })
   @ApiResponse({ status: HttpStatus.OK, type: String, description: "Link to the file" })
-  @ApiResponse({ status: HttpStatus.UNPROCESSABLE_ENTITY, type: String, description: "Validation error" })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: String, description: "Validation error" })
   @ApiImplicitFile({ name: "file", required: true })
   @UseInterceptors(
     FileInterceptor("file", {
