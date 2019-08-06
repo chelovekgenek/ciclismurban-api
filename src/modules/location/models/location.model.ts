@@ -1,5 +1,5 @@
 import { Expose, Type } from "class-transformer"
-import { ValidateNested, IsString, IsUrl } from "class-validator"
+import { ValidateNested, IsString, IsUrl, IsOptional } from "class-validator"
 
 import { PointModel } from "./point.model"
 
@@ -21,6 +21,7 @@ export class LocationModel {
   description: string
 
   @Expose({ groups: [ExposeGroup.READ, ExposeGroup.WRITE] })
+  @IsOptional({ groups: [ExposeGroup.WRITE] })
   @IsUrl({}, { always: true })
   image: string
 
