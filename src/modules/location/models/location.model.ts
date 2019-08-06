@@ -1,5 +1,5 @@
 import { Expose, Type } from "class-transformer"
-import { ValidateNested, IsString, IsUrl } from "class-validator"
+import { ValidateNested, IsString, IsUrl, Length } from "class-validator"
 
 import { PointModel } from "./point.model"
 
@@ -14,6 +14,7 @@ export class LocationModel {
 
   @Expose({ groups: [ExposeGroup.READ, ExposeGroup.WRITE] })
   @IsString({ always: true })
+  @Length(3, undefined, { always: true })
   title: string
 
   @Expose({ groups: [ExposeGroup.READ, ExposeGroup.WRITE] })
