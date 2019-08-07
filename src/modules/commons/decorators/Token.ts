@@ -1,4 +1,4 @@
 import { createParamDecorator } from "@nestjs/common"
-import { get } from "lodash"
+import { getToken } from "../helpers"
 
-export const Token = createParamDecorator((data: string, req: Request) => get(req, "headers.authorization"))
+export const Token = createParamDecorator((data: string, req: Request) => getToken(req))

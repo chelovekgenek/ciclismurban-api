@@ -1,8 +1,16 @@
-import { Controller, Get, HttpStatus, Post, Body, Param } from "@nestjs/common"
-import { ApiUseTags, ApiOperation, ApiResponse, ApiImplicitBody, ApiImplicitParam } from "@nestjs/swagger"
+import { Controller, Get, HttpStatus, Post, Body, Param, UseGuards } from "@nestjs/common"
+import {
+  ApiUseTags,
+  ApiOperation,
+  ApiResponse,
+  ApiImplicitBody,
+  ApiImplicitParam,
+  ApiImplicitHeader,
+} from "@nestjs/swagger"
 import { TransformClassToPlain } from "class-transformer"
 
 import { getValidateAndTransformPipe as pipe, getResponseOptions as options } from "modules/commons"
+import { AuthGuard } from "modules/user"
 
 import { ServiceRepository } from "../repositories"
 import { Service } from "../entities"
@@ -36,6 +44,8 @@ export class ServiceController {
   @ApiResponse({ status: HttpStatus.CREATED, description: "Ok", type: Service })
   @ApiResponse({ status: HttpStatus.UNPROCESSABLE_ENTITY, description: "Validation error" })
   @ApiImplicitBody({ name: "Payload", type: Service })
+  @ApiImplicitHeader({ name: "Authorization", required: true })
+  @UseGuards(AuthGuard)
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async createService(
     @Body(

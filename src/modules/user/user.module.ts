@@ -10,6 +10,7 @@ import { UserRepositoryProvider } from "./user.repository"
 import { UserSubscriber } from "./user.subscriber"
 import { UserService, AuthService } from "./services"
 import { AuthController } from "./controllers"
+import { AuthGuard } from "./guards"
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { AuthController } from "./controllers"
       },
     }),
   ],
-  providers: [UserRepositoryProvider, UserSubscriber, UserService, AuthService],
+  providers: [UserRepositoryProvider, UserSubscriber, UserService, AuthService, AuthGuard],
   controllers: [AuthController],
+  exports: [AuthService],
 })
 export class UserModule {}

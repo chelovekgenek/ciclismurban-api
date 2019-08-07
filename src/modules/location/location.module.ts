@@ -1,6 +1,8 @@
 import { Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 
+import { UserModule } from "modules/user"
+
 import { Parking, Service, Shop } from "./entities"
 import {
   EventRepositoryProvider,
@@ -12,7 +14,7 @@ import { EventSubscriber, ParkingSubscriber, ServiceSubscriber, ShopSubscriber }
 import { EventController, ParkingController, ServiceController, ShopController } from "./controllers"
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Parking, Service, Shop])],
+  imports: [TypeOrmModule.forFeature([Parking, Service, Shop]), UserModule],
   providers: [
     EventRepositoryProvider,
     ParkingRepositoryProvider,
