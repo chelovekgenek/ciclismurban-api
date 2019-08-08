@@ -7,8 +7,6 @@ import { ApplicationModule } from "./modules/application.module"
 import { Config, TypeormEntityNotFoundFilter } from "./modules/commons"
 import { appBootstrap } from "./app"
 
-declare const module: any
-
 async function bootstrap() {
   const logger: LoggerService = new LoggerService()
 

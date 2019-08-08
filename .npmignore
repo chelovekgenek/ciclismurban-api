@@ -1,8 +1,11 @@
-# ignore folders
+# ignored folders
 *
 
-#allow folders
+#allowed folders
 !dist/**/models/*
 !dist/**/*.model.*
 
-!dist/**/commons/helpers/validator.*
+!dist/**/interfaces/*
+!dist/**/*.interface.*
+
+!dist/**/commons/**

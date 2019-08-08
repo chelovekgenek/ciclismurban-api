@@ -12,21 +12,21 @@ import { TransformClassToPlain } from "class-transformer"
 import { getValidateAndTransformPipe as pipe, getResponseOptions as options } from "modules/commons"
 import { AuthGuard } from "modules/user"
 
-import { EventRepository } from "../repositories"
 import { Event } from "../entities"
 import { ExposeGroup } from "../models"
+import { EventService } from "../services"
 
 @Controller("api/events")
 @ApiUseTags("locations")
 export class EventController {
-  constructor(private readonly eventRepository: EventRepository) {}
+  constructor(private readonly eventService: EventService) {}
 
   @Get()
   @ApiOperation({ title: "Get event locations" })
   @ApiResponse({ status: HttpStatus.OK, description: "OK", type: Event, isArray: true })
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async getParkings(): Promise<Event[]> {
-    return this.eventRepository.find()
+    return this.eventService.find()
   }
 
   @Get("/:id")
@@ -36,7 +36,7 @@ export class EventController {
   @ApiImplicitParam({ name: "id", type: String })
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async getParking(@Param("id") uuid): Promise<Event> {
-    return this.eventRepository.findOneOrFail({ uuid })
+    return this.eventService.findById(uuid)
   }
 
   @Post()
@@ -54,8 +54,8 @@ export class EventController {
         Event,
       ),
     )
-    data: Event,
+    data: Partial<Event>,
   ): Promise<Event> {
-    return this.eventRepository.save(data)
+    return this.eventService.create(data)
   }
 }
