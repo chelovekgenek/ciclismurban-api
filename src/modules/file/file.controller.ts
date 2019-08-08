@@ -23,9 +23,9 @@ export class FileController {
     FileInterceptor("file", {
       limits: {
         files: 1,
-        fileSize: 10 * 1024 * 1024, // 10 MB
+        fileSize: 5 * 1024 * 1024, // 5 MB
       },
-      fileFilter: FileService.getExtensionFilter([".png", ".jpg"]),
+      fileFilter: FileService.getExtensionFilter([".png", ".jpg", ".jpeg"]),
     }),
   )
   upload(@UploadedFile("file") file: Express.Multer.File): Promise<string> {
