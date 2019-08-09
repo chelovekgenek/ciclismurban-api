@@ -4,6 +4,7 @@ import { ClientsModule, Transport } from "@nestjs/microservices"
 
 import { UserModule } from "modules/user"
 import { Config } from "modules/commons"
+import { LoggerModule, LoggerService } from "modules/logger"
 
 import { Parking, Service, Shop } from "./entities"
 import {
@@ -30,6 +31,7 @@ import { MESSAGE_SERVICE } from "./interfaces"
         },
       },
     ]),
+    LoggerModule,
     UserModule,
   ],
   providers: [
@@ -42,6 +44,7 @@ import { MESSAGE_SERVICE } from "./interfaces"
     ServiceSubscriber,
     ShopSubscriber,
     EventService,
+    LoggerService,
   ],
   controllers: [EventController, ParkingController, ServiceController, ShopController],
 })

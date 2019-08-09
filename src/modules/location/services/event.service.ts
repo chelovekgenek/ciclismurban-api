@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit, Inject } from "@nestjs/common"
+import { Injectable, OnModuleInit, Inject, Logger } from "@nestjs/common"
 import { ClientProxy } from "@nestjs/microservices"
 
 import { EventRepository } from "../repositories"
@@ -7,16 +7,22 @@ import { EventTypes, MESSAGE_SERVICE } from "../interfaces"
 import { classToPlain } from "class-transformer"
 import { ExposeGroup } from "../models"
 import { getResponseOptions as options } from "modules/commons"
+import { LoggerService } from "modules/logger"
 
 @Injectable()
 export class EventService implements OnModuleInit {
   constructor(
     @Inject(MESSAGE_SERVICE) private readonly client: ClientProxy,
     private readonly eventRepository: EventRepository,
+    private readonly logger: LoggerService,
   ) {}
 
   async onModuleInit() {
-    await this.client.connect()
+    try {
+      await this.client.connect()
+    } catch (e) {
+      this.logger.error("Can't connect to messenger service", e)
+    }
   }
 
   async find(): Promise<Event[]> {
