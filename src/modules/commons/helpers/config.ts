@@ -10,6 +10,7 @@ if (fs.existsSync(".env")) {
 }
 
 export class Config {
-  public static get = (name: string, defaultValue?: string | number): string =>
-    process.env[name] || String(defaultValue)
+  public static get = (name: string, defaultValue = ""): string => process.env[name] || String(defaultValue)
+  public static getNumber = (name: string, defaultValue = 0): number => Number(process.env[name] || defaultValue)
+  public static getBoolean = (name: string, defaultValue = true): boolean => Boolean(process.env[name] || defaultValue)
 }

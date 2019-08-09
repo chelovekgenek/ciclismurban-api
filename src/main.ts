@@ -7,6 +7,8 @@ import { ApplicationModule } from "./modules/application.module"
 import { Config, TypeormEntityNotFoundFilter } from "./modules/commons"
 import { appBootstrap } from "./app"
 
+declare var module: any
+
 async function bootstrap() {
   const logger: LoggerService = new LoggerService()
 
@@ -19,7 +21,7 @@ async function bootstrap() {
 
   await appBootstrap(app, logger)
 
-  const port = Config.get("PORT", 3000)
+  const port = Config.getNumber("PORT", 3000)
   await app.listen(port, () => {
     if (Config.get("NODE_ENV") !== "production") {
       const divider = chalk.gray("----------------------------------- ")
@@ -33,6 +35,11 @@ async function bootstrap() {
       logger.log(divider)
     }
   })
+
+  if (module.hot) {
+    module.hot.accept()
+    module.hot.dispose(() => app.close())
+  }
 }
 
 bootstrap()
