@@ -10,10 +10,10 @@
   },
   "private": false,
   "scripts": {
-    "start": "node dist/server",
-    "watch": "cross-env NODE_ENV=development webpack -c webpack.config.js",
-    "build": "cross-env NODE_ENV=production webpack -c webpack.config.js",
-    "prepublishOnly": "rimraf dist && tsc -p tsconfig.json && yarn release",
+    "start": "node dist/src/main.js",
+    "watch": "nodemon -V",
+    "build": "rimraf dist && tsc -p tsconfig.json",
+    "prepublishOnly": "yarn release && yarn build",
     "release": "standard-version"
   },
   "dependencies": {
@@ -45,6 +45,7 @@
     "dotenv": "^8.0.0",
     "dotenv-safe": "^6.1.0",
     "lodash": "^4.17.15",
+    "module-alias": "^2.2.1",
     "mongodb": "^3.2.7",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
@@ -59,9 +60,6 @@
     "typescript": "^3.5.3",
     "url-join": "^4.0.0",
     "uuid": "^3.3.2",
-    "webpack": "^4.39.1",
-    "webpack-cli": "^3.3.6",
-    "webpack-node-externals": "^1.7.2",
     "winston": "^3.2.1"
   },
   "devDependencies": {
@@ -89,5 +87,8 @@
     "skip": {
       "changelog": true
     }
+  },
+  "_moduleAliases": {
+    "modules": "./dist/src/modules"
   }
 }
