@@ -30,6 +30,7 @@
     "@types/bcrypt": "^3.0.0",
     "@types/express": "^4.16.0",
     "@types/lodash": "^4.14.136",
+    "@types/module-alias": "^2.0.0",
     "@types/multer": "^1.3.7",
     "@types/node": "^10.12.18",
     "@types/passport-jwt": "^3.0.1",
@@ -87,8 +88,5 @@
     "skip": {
       "changelog": true
     }
-  },
-  "_moduleAliases": {
-    "modules": "./dist/src/modules"
   }
 }

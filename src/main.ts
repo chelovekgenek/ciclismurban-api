@@ -1,9 +1,10 @@
 import { NestFactory } from "@nestjs/core"
 import { INestApplication } from "@nestjs/common"
 import chalk from "chalk"
-import "module-alias/register"
 
-import { LoggerService } from "modules/logger"
+import "./resolve-aliases"
+
+import { LoggerService } from "./modules/logger"
 import { ApplicationModule } from "./modules/application.module"
 import { Config, TypeormEntityNotFoundFilter } from "./modules/commons"
 import { appBootstrap } from "./app"
