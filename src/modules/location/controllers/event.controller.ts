@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Post, Body, Param, UseGuards } from "@nestjs/common"
+import { Controller, Get, HttpStatus, Post, Body, Param, UseGuards, Delete } from "@nestjs/common"
 import {
   ApiUseTags,
   ApiOperation,
@@ -15,6 +15,7 @@ import { AuthGuard } from "modules/user"
 import { Event } from "../entities"
 import { ExposeGroup } from "../models"
 import { EventService } from "../services"
+import { EventByIdPipe } from "../pipes"
 
 @Controller("api/events")
 @ApiUseTags("locations")
@@ -25,7 +26,7 @@ export class EventController {
   @ApiOperation({ title: "Get event locations" })
   @ApiResponse({ status: HttpStatus.OK, description: "OK", type: Event, isArray: true })
   @TransformClassToPlain(options([ExposeGroup.READ]))
-  async getParkings(): Promise<Event[]> {
+  async findAll(): Promise<Event[]> {
     return this.eventService.find()
   }
 
@@ -35,19 +36,20 @@ export class EventController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: "Entity not found" })
   @ApiImplicitParam({ name: "id", type: String })
   @TransformClassToPlain(options([ExposeGroup.READ]))
-  async getParking(@Param("id") uuid): Promise<Event> {
-    return this.eventService.findById(uuid)
+  async findById(@Param(EventByIdPipe) event: Event): Promise<Event> {
+    return event
   }
 
   @Post()
   @ApiOperation({ title: "Create event location" })
   @ApiResponse({ status: HttpStatus.CREATED, description: "Ok", type: Event })
   @ApiResponse({ status: HttpStatus.UNPROCESSABLE_ENTITY, description: "Validation error" })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "Jwt malformed" })
   @ApiImplicitBody({ name: "Payload", type: Event })
   @ApiImplicitHeader({ name: "Authorization", required: true })
   @UseGuards(AuthGuard)
   @TransformClassToPlain(options([ExposeGroup.READ]))
-  async createParking(
+  async create(
     @Body(
       pipe(
         [ExposeGroup.WRITE],
@@ -57,5 +59,18 @@ export class EventController {
     data: Partial<Event>,
   ): Promise<Event> {
     return this.eventService.create(data)
+  }
+
+  @Delete("/:id")
+  @ApiOperation({ title: "Delete event location" })
+  @ApiResponse({ status: HttpStatus.OK, description: "Ok", type: Event })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: "Event not found" })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "Jwt malformed" })
+  @ApiImplicitParam({ name: "id", type: String })
+  @ApiImplicitHeader({ name: "Authorization", required: true })
+  @UseGuards(AuthGuard)
+  @TransformClassToPlain(options([ExposeGroup.READ]))
+  async deleteById(@Param(EventByIdPipe) event: Event): Promise<Event> {
+    return this.eventService.delete(event)
   }
 }
