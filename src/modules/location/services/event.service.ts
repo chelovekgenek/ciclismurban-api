@@ -41,8 +41,8 @@ export class EventService implements OnModuleInit {
     return event
   }
 
-  async delete(event: Event): Promise<Event> {
+  async delete(event: Event): Promise<string> {
     await this.eventRepository.deleteOne(event)
-    return event
+    return event.uuid
   }
 }

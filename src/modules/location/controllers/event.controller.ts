@@ -70,7 +70,7 @@ export class EventController {
   @ApiImplicitHeader({ name: "Authorization", required: true })
   @UseGuards(AuthGuard)
   @TransformClassToPlain(options([ExposeGroup.READ]))
-  async deleteById(@Param(EventByIdPipe) event: Event): Promise<Event> {
+  async deleteById(@Param(EventByIdPipe) event: Event): Promise<string> {
     return this.eventService.delete(event)
   }
 }
