@@ -6,5 +6,5 @@ import { LocationModel, ExposeGroup } from "./location.model"
 export class EventModel extends LocationModel {
   @Expose({ groups: [ExposeGroup.READ, ExposeGroup.WRITE] })
   @IsISO8601({ always: true })
-  startedAt: Date
+  startedAt: string
 }

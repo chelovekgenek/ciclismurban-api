@@ -9,5 +9,5 @@ import { Location } from "./location.entity"
 export class Event extends Location(EventModel) {
   @Column()
   @ApiModelProperty({ type: String })
-  startedAt: Date
+  startedAt: string
 }
