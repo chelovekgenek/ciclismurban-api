@@ -8,9 +8,9 @@ interface IReqParams {
 
 @Injectable()
 export class EventByIdPipe implements PipeTransform<IReqParams, Promise<Event>> {
-  constructor(protected readonly vehicleRepository: EventRepository) {}
+  constructor(protected readonly eventRepository: EventRepository) {}
 
   async transform({ id }: IReqParams) {
-    return this.vehicleRepository.findOneOrFail({ uuid: id })
+    return this.eventRepository.findOneOrFail({ uuid: id })
   }
 }
