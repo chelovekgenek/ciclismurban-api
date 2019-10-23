@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Post, Body, Param, UseGuards, Delete } from "@nestjs/common"
+import { Controller, Get, HttpStatus, Post, Body, Param, UseGuards, Delete, Patch } from "@nestjs/common"
 import {
   ApiUseTags,
   ApiOperation,
@@ -59,6 +59,29 @@ export class EventController {
     data: Partial<Event>,
   ): Promise<Event> {
     return this.eventService.create(data)
+  }
+
+  @Patch("/:id")
+  @ApiOperation({ title: "Update event location" })
+  @ApiResponse({ status: HttpStatus.OK, description: "Ok", type: Event })
+  @ApiResponse({ status: HttpStatus.UNPROCESSABLE_ENTITY, description: "Validation error" })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "Jwt malformed" })
+  @ApiImplicitParam({ name: "id", type: String })
+  @ApiImplicitBody({ name: "Payload", type: Event })
+  @ApiImplicitHeader({ name: "Authorization", required: true })
+  @UseGuards(AuthGuard)
+  @TransformClassToPlain(options([ExposeGroup.READ]))
+  async update(
+    @Param(EventByIdPipe) event: Event,
+    @Body(
+      pipe(
+        [ExposeGroup.UPDATE],
+        Event,
+      ),
+    )
+    data: Partial<Event>,
+  ): Promise<Event> {
+    return this.eventService.update(event, data)
   }
 
   @Delete("/:id")

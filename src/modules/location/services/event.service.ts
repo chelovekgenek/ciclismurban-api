@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit, Inject, Logger } from "@nestjs/common"
+import { Injectable, OnModuleInit, Inject } from "@nestjs/common"
 import { ClientProxy } from "@nestjs/microservices"
 
 import { EventRepository } from "../repositories"
@@ -39,6 +39,10 @@ export class EventService implements OnModuleInit {
       this.client.emit(EventTypes.CREATED, classToPlain(event, options([ExposeGroup.READ]))).toPromise()
     })
     return event
+  }
+
+  async update(event: Event, data: Partial<Event>): Promise<Event> {
+    return this.eventRepository.save(this.eventRepository.merge(event, data))
   }
 
   async delete(event: Event): Promise<string> {
