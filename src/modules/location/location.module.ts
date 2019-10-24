@@ -15,7 +15,7 @@ import {
 } from "./repositories"
 import { EventSubscriber, ParkingSubscriber, ServiceSubscriber, ShopSubscriber } from "./subscribers"
 import { EventController, ParkingController, ServiceController, ShopController } from "./controllers"
-import { EventService, ParkingService, ServiceService } from "./services"
+import { EventService, ParkingService, ServiceService, ShopService } from "./services"
 import { MESSAGE_SERVICE } from "./interfaces"
 
 @Module({
@@ -46,6 +46,7 @@ import { MESSAGE_SERVICE } from "./interfaces"
     EventService,
     ParkingService,
     ServiceService,
+    ShopService,
     LoggerService,
   ],
   controllers: [EventController, ParkingController, ServiceController, ShopController],
