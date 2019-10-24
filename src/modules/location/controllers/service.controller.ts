@@ -17,7 +17,7 @@ import { Service } from "../entities"
 import { ExposeGroup } from "../models"
 
 @Controller("api/services")
-@ApiUseTags("locations")
+@ApiUseTags("services")
 export class ServiceController {
   constructor(private readonly serviceRepository: ServiceRepository) {}
 

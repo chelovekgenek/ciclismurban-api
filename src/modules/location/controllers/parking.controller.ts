@@ -18,7 +18,7 @@ import { ParkingByIdPipe } from "../pipes"
 import { ParkingService } from "../services"
 
 @Controller("api/parkings")
-@ApiUseTags("locations")
+@ApiUseTags("parkings")
 export class ParkingController {
   constructor(private readonly parkingService: ParkingService) {}
 

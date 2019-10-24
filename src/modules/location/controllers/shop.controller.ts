@@ -17,7 +17,7 @@ import { Shop } from "../entities"
 import { ExposeGroup } from "../models"
 
 @Controller("api/shops")
-@ApiUseTags("locations")
+@ApiUseTags("shops")
 export class ShopController {
   constructor(private readonly shopRepository: ShopRepository) {}
 

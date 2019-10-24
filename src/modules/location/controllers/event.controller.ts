@@ -18,7 +18,7 @@ import { EventService } from "../services"
 import { EventByIdPipe } from "../pipes"
 
 @Controller("api/events")
-@ApiUseTags("locations")
+@ApiUseTags("events")
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
