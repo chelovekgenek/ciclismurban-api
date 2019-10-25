@@ -1,13 +1,63 @@
-version: 2
+version: 2.1
+
+commands:
+  docker-login:
+    steps:
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  setup-env:
+    steps:
+      - run: git clone https://github.com/chelovekgenek/ciclismurban-root.git
+  setup-vars:
+    steps:
+      - run: |
+          echo "export DOCKER_BUILD_IMAGE=$DOCKER_USERNAME/ciclismurban:api-$CIRCLE_SHA1" >> $BASH_ENV
+          echo "export DOCKER_RELEASE_IMAGE=$DOCKER_USERNAME/ciclismurban:api-$CIRCLE_BRANCH" >> $BASH_ENV
+          source $BASH_ENV
+  run-script:
+    parameters:
+      script:
+        type: string
+      path:
+        type: string
+        default: ./ciclismurban-root/scripts
+    steps:
+      - run: |
+          chmod +x << parameters.path >>/<< parameters.script >>
+          << parameters.path >>/<< parameters.script >>
+
 jobs:
   build:
-    branches:
-      only:
-        - master
-    docker:
-      - image: circleci/node:10.15.3
+    machine: true
     steps:
       - checkout
-      - run: npx yarn install --production=true
-      - run: npx yarn build
-      - run: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master --force
+      - docker-login
+      - setup-vars
+      - run: |
+          docker build -t $DOCKER_BUILD_IMAGE --build-arg CONFIG=$CONFIG . 
+          docker push $DOCKER_BUILD_IMAGE
+  deploy-prod:
+    machine: true
+    environment:
+      DOCKER_CONTAINER: ciclismurban-api_master
+    steps:
+      - setup-env
+      - setup-vars
+      - docker-login
+      - run-script:
+          script: deploy.sh
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - master
+      - deploy-prod:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
