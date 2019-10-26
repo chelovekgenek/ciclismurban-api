@@ -10,8 +10,10 @@ commands:
   setup-vars:
     steps:
       - run: |
+          echo "export DOCKER_BUILD_CONFIG=`[ -f ./config/$CIRCLE_BRANCH.env ] && echo $CIRCLE_BRANCH.env || echo default.env`" >> $BASH_ENV
           echo "export DOCKER_BUILD_IMAGE=$DOCKER_USERNAME/ciclismurban:api-$CIRCLE_SHA1" >> $BASH_ENV
           echo "export DOCKER_RELEASE_IMAGE=$DOCKER_USERNAME/ciclismurban:api-$CIRCLE_BRANCH" >> $BASH_ENV
+          cat $BASH_ENV
           source $BASH_ENV
   run-script:
     parameters:
@@ -33,9 +35,9 @@ jobs:
       - docker-login
       - setup-vars
       - run: |
-          docker build -t $DOCKER_BUILD_IMAGE --build-arg CONFIG=$CONFIG . 
+          docker build -t $DOCKER_BUILD_IMAGE --build-arg CONFIG=$DOCKER_BUILD_CONFIG . 
           docker push $DOCKER_BUILD_IMAGE
-  deploy-prod:
+  deploy-master:
     machine: true
     environment:
       DOCKER_CONTAINER: ciclismurban-api_master
@@ -55,7 +57,7 @@ workflows:
             branches:
               only:
                 - master
-      - deploy-prod:
+      - deploy-master:
           requires:
             - build
           filters:
