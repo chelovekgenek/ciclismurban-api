@@ -1,32 +1,19 @@
 version: 2.1
 
-commands:
-  docker-login:
-    steps:
-      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-  setup-vars:
-    steps:
-      - run: |
-          echo "export DOCKER_BUILD_CONFIG=`[ -f ./config/$CIRCLE_BRANCH.env ] && echo $CIRCLE_BRANCH.env || echo default.env`" >> $BASH_ENV
-          echo "export DOCKER_BUILD_IMAGE=$DOCKER_USERNAME/ciclismurban:api-$CIRCLE_SHA1" >> $BASH_ENV
-          echo "export DOCKER_RELEASE_IMAGE=$DOCKER_USERNAME/ciclismurban:api-$CIRCLE_BRANCH" >> $BASH_ENV
-          cat $BASH_ENV
-          source $BASH_ENV
-  deploy:
-    parameters:
-      container:
-        type: string
-    steps:
-      - run: |
-          docker pull $DOCKER_BUILD_IMAGE
-          docker tag $DOCKER_BUILD_IMAGE $DOCKER_RELEASE_IMAGE
-          docker push $DOCKER_RELEASE_IMAGE
-          ssh -o "StrictHostKeyChecking=no" $SSH_HOST "
-            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-            docker pull $DOCKER_RELEASE_IMAGE
-            docker rm -f << parameters.container >> || true
-            docker run --name << parameters.container >> --restart=always -p 80:80 -d $DOCKER_RELEASE_IMAGE
-          "
+workflows:
+  build-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - master
+      - deploy-master:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
 
 jobs:
   build:
@@ -46,18 +33,33 @@ jobs:
       - deploy:
           container: ciclismurban-api_master
 
-workflows:
-  version: 2.1
-  build-deploy:
-    jobs:
-      - build:
-          filters:
-            branches:
-              only:
-                - master
-      - deploy-master:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
+commands:
+  docker-login:
+    description: Login into Docker registry
+    steps:
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  setup-vars:
+    description: Setup globally shared environment variables
+    steps:
+      - run: |
+          echo "export DOCKER_BUILD_CONFIG=`[ -f ./config/$CIRCLE_BRANCH.env ] && echo $CIRCLE_BRANCH.env || echo default.env`" >> $BASH_ENV
+          echo "export DOCKER_BUILD_IMAGE=$DOCKER_USERNAME/ciclismurban:api-$CIRCLE_SHA1" >> $BASH_ENV
+          echo "export DOCKER_RELEASE_IMAGE=$DOCKER_USERNAME/ciclismurban:api-$CIRCLE_BRANCH" >> $BASH_ENV
+          cat $BASH_ENV
+          source $BASH_ENV
+  deploy:
+    description: Deploy docker image to host by ssh
+    parameters:
+      container:
+        type: string
+    steps:
+      - run: |
+          docker pull $DOCKER_BUILD_IMAGE
+          docker tag $DOCKER_BUILD_IMAGE $DOCKER_RELEASE_IMAGE
+          docker push $DOCKER_RELEASE_IMAGE
+          ssh -o "StrictHostKeyChecking=no" $SSH_HOST "
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            docker pull $DOCKER_RELEASE_IMAGE
+            docker rm -f << parameters.container >> || true
+            docker run --name << parameters.container >> --restart=always -p 80:80 -d $DOCKER_RELEASE_IMAGE
+          "
