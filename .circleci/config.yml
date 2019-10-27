@@ -4,9 +4,6 @@ commands:
   docker-login:
     steps:
       - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-  setup-env:
-    steps:
-      - run: git clone https://github.com/chelovekgenek/ciclismurban-root.git
   setup-vars:
     steps:
       - run: |
@@ -15,41 +12,42 @@ commands:
           echo "export DOCKER_RELEASE_IMAGE=$DOCKER_USERNAME/ciclismurban:api-$CIRCLE_BRANCH" >> $BASH_ENV
           cat $BASH_ENV
           source $BASH_ENV
-  run-script:
+  deploy:
     parameters:
-      script:
+      container:
         type: string
-      path:
-        type: string
-        default: ./ciclismurban-root/scripts
     steps:
       - run: |
-          chmod +x << parameters.path >>/<< parameters.script >>
-          << parameters.path >>/<< parameters.script >>
+          docker pull $DOCKER_BUILD_IMAGE
+          docker tag $DOCKER_BUILD_IMAGE $DOCKER_RELEASE_IMAGE
+          docker push $DOCKER_RELEASE_IMAGE
+          ssh -o "StrictHostKeyChecking=no" $SSH_HOST "
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            docker pull $DOCKER_RELEASE_IMAGE
+            docker rm -f << parameters.container >> || true
+            docker run --name << parameters.container >> --restart=always -p 80:80 -d $DOCKER_RELEASE_IMAGE
+          "
 
 jobs:
   build:
     machine: true
     steps:
       - checkout
-      - docker-login
       - setup-vars
+      - docker-login
       - run: |
           docker build -t $DOCKER_BUILD_IMAGE --build-arg CONFIG=$DOCKER_BUILD_CONFIG . 
           docker push $DOCKER_BUILD_IMAGE
   deploy-master:
     machine: true
-    environment:
-      DOCKER_CONTAINER: ciclismurban-api_master
     steps:
-      - setup-env
       - setup-vars
       - docker-login
-      - run-script:
-          script: deploy.sh
+      - deploy:
+          container: ciclismurban-api_master
 
 workflows:
-  version: 2
+  version: 2.1
   build-deploy:
     jobs:
       - build:
