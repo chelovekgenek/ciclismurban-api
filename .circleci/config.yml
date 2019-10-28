@@ -1,16 +1,12 @@
 version: 2.1
 
 orbs:
-  common: ciclismurban/common@0.0.1
+  common: ciclismurban/common@0.2.3
 
 workflows:
   build-deploy:
     jobs:
-      - common/build:
-          filters:
-            branches:
-              only:
-                - master
+      - common/build
       - common/deploy-master:
           requires:
             - common/build
