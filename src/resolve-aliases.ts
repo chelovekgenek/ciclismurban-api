@@ -3,7 +3,7 @@ import path from "path"
 
 const resolver = () => {
   moduleAlias.addAliases({
-    modules: path.resolve(__dirname, "modules")
+    modules: path.resolve(__dirname, "modules"),
   })
 }
 
