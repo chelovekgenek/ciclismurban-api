@@ -1,8 +1,6 @@
 import { Expose, Type } from "class-transformer"
 import { IsArray, ValidateNested, IsMilitaryTime } from "class-validator"
 
-const timePattern = /^$|^(([01][0-9])|(2[0-3])):[0-5][0-9]$/
-
 class DailyScheduleItemModel {
   @Expose()
   @IsMilitaryTime()

@@ -1,5 +1,6 @@
 export * from "./location.model"
 export * from "./point.model"
+export * from "./weekly-schedule.model"
 
 export * from "./event.model"
 export * from "./parking.model"
