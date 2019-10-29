@@ -50,13 +50,18 @@ describe("WeeklyScheduleModel", () => {
       mon: [{ from: "00.00", to: "99:99" }],
     }
     const error = await wrapErrorCase(() => validate(values))
-    expect(error).toStrictEqual([{ path: "mon[0].from", message: "" }, { path: "mon[0].to", message: "" }])
+    expect(error).toStrictEqual([
+      { path: "mon[0].from", message: "from must match /^$|^(([01][0-9])|(2[0-3])):[0-5][0-9]$/ regular expression" },
+      { path: "mon[0].to", message: "to must match /^$|^(([01][0-9])|(2[0-3])):[0-5][0-9]$/ regular expression" },
+    ])
   })
   it("should throw error if daily has explicit or missing keys", async () => {
     const values = {
       mon: [{ morf: "00:00", to: "00:01" }],
     }
     const error = await wrapErrorCase(() => validate(values))
-    expect(error).toStrictEqual([{ path: "mon[0].from", message: "" }])
+    expect(error).toStrictEqual([
+      { path: "mon[0].from", message: "from must match /^$|^(([01][0-9])|(2[0-3])):[0-5][0-9]$/ regular expression" },
+    ])
   })
 })

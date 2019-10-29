@@ -15,7 +15,8 @@
     "build": "rimraf dist && tsc -p tsconfig.json",
     "prepublishOnly": "yarn release && yarn build",
     "release": "standard-version",
-    "test": "jest --watch"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@moebius/http-graceful-shutdown": "^1.1.0",
@@ -76,9 +77,9 @@
     "typescript": "^3.5.3"
   },
   "lint-staged": {
-    "{*.ts}": [
-      "tslint -p tsconfig.json -c tslint.json",
-      "prettier --write \"src/*",
+    "*.{ts}": [
+      "tslint -p tsconfig.json",
+      "prettier --write",
       "yarn test",
       "git add"
     ]
