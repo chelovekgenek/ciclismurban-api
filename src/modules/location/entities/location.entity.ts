@@ -3,18 +3,7 @@ import { ApiModelProperty } from "@nestjs/swagger"
 import { Exclude } from "class-transformer"
 
 import { Constructor } from "modules/commons"
-
-import { PointModel } from "../models"
-
-export class Point extends PointModel {
-  @Column()
-  @ApiModelProperty({ type: Number })
-  lat: number
-
-  @Column()
-  @ApiModelProperty({ type: Number })
-  lng: number
-}
+import { Point } from "./misc.entity"
 
 export function Location<T extends Constructor<{}>>(SuperClass: T) {
   class LocalClass extends SuperClass {

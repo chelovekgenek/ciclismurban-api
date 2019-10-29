@@ -8,6 +8,6 @@ export class ShopModel extends LocationModel {
   @Expose({ groups: [ExposeGroup.READ, ExposeGroup.WRITE, ExposeGroup.UPDATE] })
   @IsOptional({ groups: [ExposeGroup.UPDATE] })
   @Type(() => WeeklyScheduleModel)
-  @ValidateNested()
+  @ValidateNested({ always: true })
   schedule: WeeklyScheduleModel
 }
