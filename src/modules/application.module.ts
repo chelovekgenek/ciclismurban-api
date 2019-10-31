@@ -5,7 +5,7 @@ import { LoggerModule } from "./logger"
 import { LocationModule } from "./location"
 import { UserModule } from "./user"
 import { FileModule } from "./file"
-import { ormconfig } from "./ormconfig"
+import ormconfig from "../ormconfig"
 
 @Module({
   imports: [TypeOrmModule.forRoot(ormconfig), LoggerModule, LocationModule, UserModule, FileModule],

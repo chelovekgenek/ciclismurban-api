@@ -1,8 +1,8 @@
 import { TypeOrmModuleOptions } from "@nestjs/typeorm"
 import { getMetadataArgsStorage } from "typeorm"
-import { Config } from "./commons"
+import { Config } from "./modules/commons"
 
-export const ormconfig: TypeOrmModuleOptions = {
+const ormconfig: TypeOrmModuleOptions = {
   name: "default",
   type: "mongodb",
   host: Config.get("TYPEORM_HOST"),
@@ -12,7 +12,13 @@ export const ormconfig: TypeOrmModuleOptions = {
   database: Config.get("TYPEORM_DATABASE"),
   entities: getMetadataArgsStorage().tables.map(tbl => tbl.target),
   subscribers: getMetadataArgsStorage().entitySubscribers.map(tbl => tbl.target),
-  synchronize: Config.getBoolean("TYPEORM_SYNCHRONIZE"),
+  synchronize: false,
   logging: "all",
   keepConnectionAlive: true,
+  migrations: [__dirname + "/migrations/**/*{.ts,.js}"],
+  cli: {
+    migrationsDir: "src/migrations",
+  },
 }
+
+export = ormconfig
