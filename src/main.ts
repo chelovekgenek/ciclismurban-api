@@ -4,7 +4,7 @@ import chalk from "chalk"
 
 import "./resolve-aliases"
 
-import { LoggerService } from "./modules/logger"
+import { LoggerService, LoggerInterceptor } from "./modules/logger"
 import { ApplicationModule } from "./modules/application.module"
 import { Config, TypeormEntityNotFoundFilter } from "./modules/commons"
 import { appBootstrap } from "./app"
@@ -18,6 +18,7 @@ async function bootstrap() {
 
   app.enableCors()
   app.useGlobalFilters(new TypeormEntityNotFoundFilter())
+  app.useGlobalInterceptors(new LoggerInterceptor(logger))
 
   await appBootstrap(app, logger)
 
