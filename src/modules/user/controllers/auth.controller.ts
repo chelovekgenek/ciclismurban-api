@@ -2,7 +2,7 @@ import { Controller, HttpStatus, HttpCode, Post, Body, UseGuards } from "@nestjs
 import { ApiUseTags, ApiOperation, ApiResponse, ApiImplicitBody, ApiImplicitHeader } from "@nestjs/swagger"
 import { TransformClassToPlain } from "class-transformer"
 
-import { getValidateAndTransformPipe as pipe, getResponseOptions as options, Token } from "modules/commons"
+import { getValidateAndTransformPipe as pipe, getResponseOptions as options, Token, GoogleToken } from "modules/commons"
 
 import { AuthService } from "../services"
 import { AuthResponseDto } from "../dto"
@@ -14,15 +14,24 @@ import { User } from "../entities"
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post("/login/token")
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ title: "Login User by exisiting token" })
-  @ApiResponse({ status: HttpStatus.OK, description: "OK", type: AuthResponseDto })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "Jwt malformed" })
-  @ApiImplicitHeader({ name: "Authorization", required: true })
+  @Post("/register")
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ title: "Register a new user and get a key (also contact will be created)" })
+  @ApiResponse({ status: HttpStatus.CREATED, description: "OK", type: AuthResponseDto })
+  @ApiResponse({ status: HttpStatus.UNPROCESSABLE_ENTITY, description: "Validation error" })
+  @ApiResponse({ status: HttpStatus.CONFLICT, description: "Duplicate key" })
+  @ApiImplicitBody({ name: "Auth body", type: User })
   @TransformClassToPlain(options([ExposeGroup.READ]))
-  async loginByToken(@Token() token: string): Promise<AuthResponseDto> {
-    return this.authService.loginByToken(token)
+  async register(
+    @Body(
+      pipe(
+        [ExposeGroup.WRITE],
+        User,
+      ),
+    )
+    data: User,
+  ): Promise<AuthResponseDto> {
+    return this.authService.register(data)
   }
 
   @Post("/login")
@@ -45,23 +54,25 @@ export class AuthController {
     return this.authService.login(data)
   }
 
-  @Post("/register")
-  @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ title: "Register a new user and get a key (also contact will be created)" })
-  @ApiResponse({ status: HttpStatus.CREATED, description: "OK", type: AuthResponseDto })
-  @ApiResponse({ status: HttpStatus.UNPROCESSABLE_ENTITY, description: "Validation error" })
-  @ApiResponse({ status: HttpStatus.CONFLICT, description: "Duplicate key" })
-  @ApiImplicitBody({ name: "Auth body", type: User })
+  @Post("/login/token")
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ title: "Login User by existing JWT token" })
+  @ApiResponse({ status: HttpStatus.OK, description: "OK", type: AuthResponseDto })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "Jwt malformed" })
+  @ApiImplicitHeader({ name: "Authorization", required: true })
   @TransformClassToPlain(options([ExposeGroup.READ]))
-  async register(
-    @Body(
-      pipe(
-        [ExposeGroup.WRITE],
-        User,
-      ),
-    )
-    data: User,
-  ): Promise<AuthResponseDto> {
-    return this.authService.register(data)
+  async loginByToken(@Token() token: string): Promise<AuthResponseDto> {
+    return this.authService.loginByToken(token)
+  }
+
+  @Post("/login/google")
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ title: "Login User by Google OAuth token" })
+  @ApiResponse({ status: HttpStatus.OK, description: "OK", type: AuthResponseDto })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "token is wrong" })
+  @ApiImplicitHeader({ name: "Authorization-Google", required: true })
+  @TransformClassToPlain(options([ExposeGroup.READ]))
+  async loginByGoogle(@GoogleToken() token: string): Promise<AuthResponseDto> {
+    return this.authService.loginByGoogle(token)
   }
 }

@@ -7,7 +7,7 @@ import { User } from "../entities"
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async create(data: User): Promise<User> {
+  async create(data: Partial<User>): Promise<User> {
     const entity = this.userRepository.create(data)
     return this.userRepository.save(entity)
   }

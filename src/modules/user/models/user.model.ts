@@ -18,7 +18,7 @@ export class UserModel {
   @Expose({ groups: [ExposeGroup.WRITE, ExposeGroup.LOGIN] })
   @IsString({ always: true })
   @Length(8, 16, { always: true })
-  password: string
+  password?: string
 
   @Expose({ groups: [ExposeGroup.READ] })
   createdAt: Date

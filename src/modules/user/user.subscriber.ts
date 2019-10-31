@@ -18,7 +18,9 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
 
     event.entity.uuid = uuid()
 
-    event.entity.password = await hash(event.entity.password, this.saltRounds)
+    if (event.entity.password) {
+      event.entity.password = await hash(event.entity.password, this.saltRounds)
+    }
 
     event.entity.createdAt = now
     event.entity.updatedAt = now

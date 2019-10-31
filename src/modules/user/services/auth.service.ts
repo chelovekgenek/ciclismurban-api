@@ -1,7 +1,10 @@
 import { JwtService } from "@nestjs/jwt"
 import { Injectable, UnauthorizedException, ConflictException } from "@nestjs/common"
+import { OAuth2Client } from "google-auth-library"
 import { plainToClass } from "class-transformer"
 import bcrypt from "bcrypt"
+
+import { Config } from "modules/commons"
 
 import { JwtPayload } from "../interfaces/jwt.interface"
 import { AuthResponseDto } from "../dto"
@@ -12,6 +15,8 @@ import { UserService } from "./user.service"
 @Injectable()
 export class AuthService {
   constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {}
+  private readonly secretGoogle = Config.get("GOOGLE_OUATH_SECRET")
+  private readonly clientGoogle = new OAuth2Client(this.secretGoogle)
 
   async login(data: User): Promise<AuthResponseDto> {
     try {
@@ -33,7 +38,23 @@ export class AuthService {
     return this.response(user)
   }
 
-  async register(data: User): Promise<AuthResponseDto> {
+  async loginByGoogle(token: string): Promise<AuthResponseDto | null> {
+    const ticket = await this.clientGoogle.verifyIdToken({
+      idToken: token,
+      audience: this.secretGoogle,
+    })
+    const payload = ticket.getPayload()
+    let user: User
+    try {
+      user = await this.userService.findOneByEmail(payload.email)
+    } catch (e) {}
+    if (!user) {
+      user = await this.userService.create({ email: payload.email })
+    }
+    return this.response(user)
+  }
+
+  async register(data: Partial<User>): Promise<AuthResponseDto> {
     try {
       const user = await this.userService.create(data)
       return this.response(user)

@@ -29,7 +29,7 @@ export class User extends UserModel {
 
   @Column()
   @ApiModelProperty({ type: String })
-  password: string
+  password?: string
 
   @CreateDateColumn()
   @ApiModelProperty({ type: String, format: "date-time", readOnly: true })
