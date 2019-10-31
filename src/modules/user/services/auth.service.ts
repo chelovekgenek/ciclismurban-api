@@ -11,6 +11,7 @@ import { AuthResponseDto } from "../dto"
 import { User } from "../entities"
 import { ExposeGroup } from "../models"
 import { UserService } from "./user.service"
+import { LoginTicket } from "google-auth-library/build/src/auth/loginticket"
 
 @Injectable()
 export class AuthService {
@@ -39,10 +40,15 @@ export class AuthService {
   }
 
   async loginByGoogle(token: string): Promise<AuthResponseDto | null> {
-    const ticket = await this.clientGoogle.verifyIdToken({
-      idToken: token,
-      audience: this.secretGoogle,
-    })
+    let ticket: LoginTicket
+    try {
+      ticket = await this.clientGoogle.verifyIdToken({
+        idToken: token,
+        audience: this.secretGoogle,
+      })
+    } catch (e) {
+      throw new UnauthorizedException()
+    }
     const payload = ticket.getPayload()
     let user: User
     try {
