@@ -1,4 +1,5 @@
 import { Controller, Get, HttpStatus, Post, Body, Param, UseGuards, Patch, Delete } from "@nestjs/common"
+import { AuthGuard } from "@nestjs/passport"
 import {
   ApiUseTags,
   ApiOperation,
@@ -10,7 +11,6 @@ import {
 import { TransformClassToPlain } from "class-transformer"
 
 import { getValidateAndTransformPipe as pipe, getResponseOptions as options } from "modules/commons"
-import { AuthGuard } from "modules/user"
 
 import { Shop } from "../entities"
 import { ExposeGroup } from "../models"
@@ -46,7 +46,7 @@ export class ShopController {
   @ApiResponse({ status: HttpStatus.UNPROCESSABLE_ENTITY, description: "Validation error" })
   @ApiImplicitBody({ name: "Payload", type: Shop })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async create(
     @Body(
@@ -68,7 +68,7 @@ export class ShopController {
   @ApiImplicitParam({ name: "id", type: String })
   @ApiImplicitBody({ name: "Payload", type: Shop })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async update(
     @Param(ShopByIdPipe) shop: Shop,
@@ -90,7 +90,7 @@ export class ShopController {
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "Jwt malformed" })
   @ApiImplicitParam({ name: "id", type: String })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async deleteById(@Param(ShopByIdPipe) shop: Shop): Promise<string> {
     return this.shopService.delete(shop)

@@ -1,3 +1,3 @@
 export interface JwtPayload {
-  uuid: string
+  sub: string
 }

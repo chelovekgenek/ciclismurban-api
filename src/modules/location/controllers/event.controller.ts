@@ -1,4 +1,5 @@
 import { Controller, Get, HttpStatus, Post, Body, Param, UseGuards, Delete, Patch } from "@nestjs/common"
+import { AuthGuard } from "@nestjs/passport"
 import {
   ApiUseTags,
   ApiOperation,
@@ -10,7 +11,6 @@ import {
 import { TransformClassToPlain } from "class-transformer"
 
 import { getValidateAndTransformPipe as pipe, getResponseOptions as options } from "modules/commons"
-import { AuthGuard } from "modules/user"
 
 import { Event } from "../entities"
 import { ExposeGroup } from "../models"
@@ -47,7 +47,7 @@ export class EventController {
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "Jwt malformed" })
   @ApiImplicitBody({ name: "Payload", type: Event })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async create(
     @Body(
@@ -69,7 +69,7 @@ export class EventController {
   @ApiImplicitParam({ name: "id", type: String })
   @ApiImplicitBody({ name: "Payload", type: Event })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async update(
     @Param(EventByIdPipe) event: Event,
@@ -91,7 +91,7 @@ export class EventController {
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "Jwt malformed" })
   @ApiImplicitParam({ name: "id", type: String })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async deleteById(@Param(EventByIdPipe) event: Event): Promise<string> {
     return this.eventService.delete(event)

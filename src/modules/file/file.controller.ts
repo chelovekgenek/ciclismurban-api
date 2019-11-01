@@ -1,8 +1,7 @@
 import { Controller, Post, HttpStatus, UseInterceptors, HttpCode, UploadedFile, UseGuards } from "@nestjs/common"
 import { FileInterceptor } from "@nestjs/platform-express"
+import { AuthGuard } from "@nestjs/passport"
 import { ApiOperation, ApiUseTags, ApiResponse, ApiImplicitFile, ApiImplicitHeader } from "@nestjs/swagger"
-
-import { AuthGuard } from "modules/user"
 
 import { FileService } from "./services/file.service"
 
@@ -18,7 +17,7 @@ export class FileController {
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: String, description: "Validation error" })
   @ApiImplicitFile({ name: "file", required: true })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard("jwt"))
   @UseInterceptors(
     FileInterceptor("file", {
       limits: {
