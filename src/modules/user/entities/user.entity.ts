@@ -1,7 +1,9 @@
 import { Column, Entity, ObjectIdColumn, Index, ObjectID, CreateDateColumn, UpdateDateColumn } from "typeorm"
 import { Exclude } from "class-transformer"
-import { UserModel } from "../models/user.model"
 import { ApiModelProperty } from "@nestjs/swagger"
+
+import { UserModel } from "../models"
+import { Social } from "./social.entity"
 
 @Entity({ name: "users" })
 export class User extends UserModel {
@@ -34,6 +36,9 @@ export class User extends UserModel {
   @Column()
   @ApiModelProperty({ type: String, isArray: true, readOnly: true })
   permissions: string[]
+
+  @Column()
+  social: Social
 
   @CreateDateColumn()
   @ApiModelProperty({ type: String, format: "date-time", readOnly: true })

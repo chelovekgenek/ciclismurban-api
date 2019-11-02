@@ -1,5 +1,6 @@
-import { Expose } from "class-transformer"
+import { Expose, Exclude, Type } from "class-transformer"
 import { IsEmail, IsString, Length, IsArray } from "class-validator"
+import { SocialModel } from "./social.model"
 
 export enum ExposeGroup {
   READ = "read",
@@ -24,6 +25,10 @@ export class UserModel {
   @IsArray({ always: true })
   @IsString({ always: true, each: true })
   permissions: string[]
+
+  @Exclude()
+  @Type(() => SocialModel)
+  social?: SocialModel
 
   @Expose({ groups: [ExposeGroup.READ] })
   createdAt: Date

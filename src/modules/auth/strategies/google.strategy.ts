@@ -21,7 +21,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
     const payload = await this.verifyToken(token)
     let user: User
     if (payload) {
-      user = await this.authService.validateOrCreateSocialUser(payload.email)
+      user = await this.authService.validateOrCreateSocialUser(payload.email, { googleId: payload.sub })
     }
     if (!user) {
       throw new UnauthorizedException()

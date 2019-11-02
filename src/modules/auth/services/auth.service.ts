@@ -5,7 +5,7 @@ import bcrypt from "bcrypt"
 
 import { User, ExposeGroup, UserService } from "modules/user"
 
-import { JwtPayload } from "../interfaces"
+import { JwtPayload, SocialPayload } from "../interfaces"
 import { AuthResponseDto } from "../dto"
 
 @Injectable()
@@ -53,13 +53,13 @@ export class AuthService {
     }
   }
 
-  async validateOrCreateSocialUser(email: string): Promise<User> {
+  async validateOrCreateSocialUser(email: string, social: SocialPayload = {}): Promise<User> {
     let user: User
     try {
       user = await this.userService.findOneByEmail(email)
     } catch (e) {}
     if (!user) {
-      user = await this.userService.create({ email })
+      user = await this.userService.create({ email, social })
     }
     return user
   }

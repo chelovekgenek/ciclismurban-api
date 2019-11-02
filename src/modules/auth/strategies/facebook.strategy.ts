@@ -17,7 +17,7 @@ export class FacebookStrategy extends PassportStrategy(Strategy, "facebook") {
     const payload = await this.verifyToken(token)
     let user: User
     if (payload) {
-      user = await this.authService.validateOrCreateSocialUser(payload.email)
+      user = await this.authService.validateOrCreateSocialUser(payload.email, { facebookId: payload.id })
     }
     if (!user) {
       throw new UnauthorizedException()
