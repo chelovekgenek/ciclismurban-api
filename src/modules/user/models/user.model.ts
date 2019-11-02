@@ -22,8 +22,6 @@ export class UserModel {
   password?: string
 
   @Expose({ groups: [ExposeGroup.READ] })
-  @IsArray({ always: true })
-  @IsString({ always: true, each: true })
   permissions: string[]
 
   @Exclude()
