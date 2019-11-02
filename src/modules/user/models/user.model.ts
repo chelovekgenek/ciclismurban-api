@@ -1,5 +1,5 @@
 import { Expose } from "class-transformer"
-import { IsEmail, IsString, Length } from "class-validator"
+import { IsEmail, IsString, Length, IsArray } from "class-validator"
 
 export enum ExposeGroup {
   READ = "read",
@@ -19,6 +19,11 @@ export class UserModel {
   @IsString({ always: true })
   @Length(8, 16, { always: true })
   password?: string
+
+  @Expose({ groups: [ExposeGroup.READ] })
+  @IsArray({ always: true })
+  @IsString({ always: true, each: true })
+  permissions: string[]
 
   @Expose({ groups: [ExposeGroup.READ] })
   createdAt: Date

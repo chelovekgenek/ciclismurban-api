@@ -1,15 +1,12 @@
 import { JwtService } from "@nestjs/jwt"
-import { Injectable, UnauthorizedException, ConflictException } from "@nestjs/common"
+import { Injectable, ConflictException } from "@nestjs/common"
 import { plainToClass } from "class-transformer"
 import bcrypt from "bcrypt"
 
-import { Config } from "modules/commons"
+import { User, ExposeGroup, UserService } from "modules/user"
 
-import { JwtPayload } from "../interfaces/jwt.interface"
+import { JwtPayload } from "../interfaces"
 import { AuthResponseDto } from "../dto"
-import { User } from "../entities"
-import { ExposeGroup } from "../models"
-import { UserService } from "./user.service"
 
 @Injectable()
 export class AuthService {

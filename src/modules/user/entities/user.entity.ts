@@ -31,6 +31,10 @@ export class User extends UserModel {
   @ApiModelProperty({ type: String })
   password?: string
 
+  @Column()
+  @ApiModelProperty({ type: String, isArray: true, readOnly: true })
+  permissions: string[]
+
   @CreateDateColumn()
   @ApiModelProperty({ type: String, format: "date-time", readOnly: true })
   createdAt: Date

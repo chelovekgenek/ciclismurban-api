@@ -4,10 +4,10 @@ import { Strategy } from "passport-http-bearer"
 import { OAuth2Client } from "google-auth-library"
 import { LoginTicket, TokenPayload } from "google-auth-library/build/src/auth/loginticket"
 
+import { User } from "modules/user"
+
 import { AuthService } from "../services"
 import { GOOGLE_OPTIONS } from "../constants"
-import { AuthResponseDto } from "../dto"
-import { User } from "../entities"
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
@@ -17,7 +17,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
     super()
   }
 
-  async validate(token: string): Promise<AuthResponseDto> {
+  async validate(token: string): Promise<User> {
     const payload = await this.verifyToken(token)
     let user: User
     if (payload) {
@@ -26,7 +26,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
     if (!user) {
       throw new UnauthorizedException()
     }
-    return this.authService.pack(user)
+    return user
   }
 
   async verifyToken(token: string): Promise<TokenPayload> {

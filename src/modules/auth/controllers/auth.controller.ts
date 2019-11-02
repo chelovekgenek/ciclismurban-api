@@ -4,14 +4,13 @@ import { ApiUseTags, ApiOperation, ApiResponse, ApiImplicitBody, ApiImplicitHead
 import { TransformClassToPlain } from "class-transformer"
 
 import { getValidateAndTransformPipe as pipe, getResponseOptions as options } from "modules/commons"
+import { User, ExposeGroup } from "modules/user"
 
-import { AuthService } from "../services"
 import { AuthResponseDto } from "../dto"
-import { ExposeGroup } from "../models"
-import { User } from "../entities"
+import { AuthService } from "../services"
 
 @Controller("api/auth")
-@ApiUseTags("users")
+@ApiUseTags("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -44,7 +43,7 @@ export class AuthController {
   @ApiImplicitBody({ name: "Auth body", type: User })
   @UseGuards(AuthGuard("local"))
   async login(@Request() req): Promise<AuthResponseDto> {
-    return req.user
+    return this.authService.pack(req.user)
   }
 
   @Post("/login/token")
@@ -55,7 +54,7 @@ export class AuthController {
   @ApiImplicitHeader({ name: "Authorization", required: true, description: "Bearer token" })
   @UseGuards(AuthGuard("jwt"))
   async loginByToken(@Request() req): Promise<AuthResponseDto> {
-    return req.user
+    return this.authService.pack(req.user)
   }
 
   @Post("/login/google")
@@ -65,8 +64,8 @@ export class AuthController {
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "token is wrong" })
   @ApiImplicitHeader({ name: "Authorization", required: true, description: "Bearer token" })
   @UseGuards(AuthGuard("google"))
-  async loginByGoogle(@Request() req): Promise<null> {
-    return req.user
+  async loginByGoogle(@Request() req): Promise<AuthResponseDto> {
+    return this.authService.pack(req.user)
   }
 
   @Post("/login/facebook")
@@ -76,7 +75,7 @@ export class AuthController {
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "token is wrong" })
   @ApiImplicitHeader({ name: "Authorization", required: true, description: "Bearer token" })
   @UseGuards(AuthGuard("facebook"))
-  async loginByFacebook(@Request() req): Promise<null> {
-    return req.user
+  async loginByFacebook(@Request() req): Promise<AuthResponseDto> {
+    return this.authService.pack(req.user)
   }
 }

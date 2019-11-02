@@ -1,8 +1,9 @@
 import { ApiModelProperty } from "@nestjs/swagger"
-
-import { User } from "../entities"
-import { AuthResponseModel, ExposeGroup } from "../models"
 import { Type, Expose } from "class-transformer"
+
+import { User, ExposeGroup } from "modules/user"
+
+import { AuthResponseModel } from "../models"
 
 export class AuthResponseDto extends AuthResponseModel {
   @ApiModelProperty({ type: String })
