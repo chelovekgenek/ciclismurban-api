@@ -4,6 +4,7 @@ import { User } from "../entities"
 @Injectable()
 export class PermissionsGuard implements CanActivate {
   private readonly permissions: string[]
+
   constructor(...permissions: string[]) {
     this.permissions = permissions
   }
