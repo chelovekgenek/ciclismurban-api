@@ -11,11 +11,13 @@ import {
 import { TransformClassToPlain } from "class-transformer"
 
 import { getValidateAndTransformPipe as pipe, getResponseOptions as options } from "modules/commons"
+import { PermissionsGuard } from "modules/user"
 
 import { Shop } from "../entities"
 import { ExposeGroup } from "../models"
 import { ShopService } from "../services"
 import { ShopByIdPipe } from "../pipes"
+import { ShopPermissions } from "../interfaces"
 
 @Controller("api/shops")
 @ApiUseTags("shops")
@@ -46,7 +48,7 @@ export class ShopController {
   @ApiResponse({ status: HttpStatus.UNPROCESSABLE_ENTITY, description: "Validation error" })
   @ApiImplicitBody({ name: "Payload", type: Shop })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard("jwt"), new PermissionsGuard(ShopPermissions.CREATE))
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async create(
     @Body(
@@ -68,7 +70,7 @@ export class ShopController {
   @ApiImplicitParam({ name: "id", type: String })
   @ApiImplicitBody({ name: "Payload", type: Shop })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard("jwt"), new PermissionsGuard(ShopPermissions.UPDATE))
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async update(
     @Param(ShopByIdPipe) shop: Shop,
@@ -90,7 +92,7 @@ export class ShopController {
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "Jwt malformed" })
   @ApiImplicitParam({ name: "id", type: String })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard("jwt"), new PermissionsGuard(ShopPermissions.DELETE))
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async deleteById(@Param(ShopByIdPipe) shop: Shop): Promise<string> {
     return this.shopService.delete(shop)

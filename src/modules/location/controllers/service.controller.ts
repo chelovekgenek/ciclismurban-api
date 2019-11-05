@@ -11,11 +11,13 @@ import {
 import { TransformClassToPlain } from "class-transformer"
 
 import { getValidateAndTransformPipe as pipe, getResponseOptions as options } from "modules/commons"
+import { PermissionsGuard } from "modules/user"
 
 import { ExposeGroup } from "../models"
 import { ServiceService } from "../services"
 import { Service } from "../entities"
 import { ServiceByIdPipe } from "../pipes"
+import { ServicePermissions } from ".."
 
 @Controller("api/services")
 @ApiUseTags("services")
@@ -46,7 +48,7 @@ export class ServiceController {
   @ApiResponse({ status: HttpStatus.UNPROCESSABLE_ENTITY, description: "Validation error" })
   @ApiImplicitBody({ name: "Payload", type: Service })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard("jwt"), new PermissionsGuard(ServicePermissions.CREATE))
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async create(
     @Body(
@@ -68,7 +70,7 @@ export class ServiceController {
   @ApiImplicitParam({ name: "id", type: String })
   @ApiImplicitBody({ name: "Payload", type: Service })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard("jwt"), new PermissionsGuard(ServicePermissions.UPDATE))
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async update(
     @Param(ServiceByIdPipe) service: Service,
@@ -90,7 +92,7 @@ export class ServiceController {
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "Jwt malformed" })
   @ApiImplicitParam({ name: "id", type: String })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard("jwt"), new PermissionsGuard(ServicePermissions.DELETE))
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async deleteById(@Param(ServiceByIdPipe) service: Service): Promise<string> {
     return this.serviceService.delete(service)

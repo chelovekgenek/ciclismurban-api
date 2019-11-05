@@ -11,11 +11,13 @@ import {
 import { TransformClassToPlain } from "class-transformer"
 
 import { getValidateAndTransformPipe as pipe, getResponseOptions as options } from "modules/commons"
+import { PermissionsGuard } from "modules/user"
 
 import { Event } from "../entities"
 import { ExposeGroup } from "../models"
 import { EventService } from "../services"
 import { EventByIdPipe } from "../pipes"
+import { EventPermissions } from "../interfaces"
 
 @Controller("api/events")
 @ApiUseTags("events")
@@ -47,7 +49,7 @@ export class EventController {
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "Jwt malformed" })
   @ApiImplicitBody({ name: "Payload", type: Event })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard("jwt"), new PermissionsGuard(EventPermissions.CREATE))
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async create(
     @Body(
@@ -69,7 +71,7 @@ export class EventController {
   @ApiImplicitParam({ name: "id", type: String })
   @ApiImplicitBody({ name: "Payload", type: Event })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard("jwt"), new PermissionsGuard(EventPermissions.UPDATE))
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async update(
     @Param(EventByIdPipe) event: Event,
@@ -91,7 +93,7 @@ export class EventController {
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "Jwt malformed" })
   @ApiImplicitParam({ name: "id", type: String })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard("jwt"), new PermissionsGuard(EventPermissions.DELETE))
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async deleteById(@Param(EventByIdPipe) event: Event): Promise<string> {
     return this.eventService.delete(event)

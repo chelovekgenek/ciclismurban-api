@@ -1,8 +1,15 @@
+import { IsEmail, IsString, Length, IsArray, IsIn } from "class-validator"
 import { Expose, Exclude, Type } from "class-transformer"
-import { IsEmail, IsString, Length, IsIn } from "class-validator"
 
-import { Permissions, ExposeGroup } from "../interfaces"
 import { SocialModel } from "./social.model"
+import { MergedPermissions } from "./merged-permissions"
+
+export enum ExposeGroup {
+  READ = "read",
+  WRITE = "write",
+  UPDATE = "update",
+  LOGIN = "login",
+}
 
 export class UserModel {
   @Expose({ groups: [ExposeGroup.READ] })
@@ -18,7 +25,8 @@ export class UserModel {
   password?: string
 
   @Expose({ groups: [ExposeGroup.READ] })
-  @IsIn(Permissions, { always: true })
+  @IsArray({ groups: [ExposeGroup.UPDATE] })
+  @IsIn(MergedPermissions, { groups: [ExposeGroup.UPDATE], each: true })
   permissions: string[]
 
   @Exclude()

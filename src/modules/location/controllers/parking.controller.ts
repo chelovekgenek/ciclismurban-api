@@ -11,12 +11,14 @@ import {
 import { TransformClassToPlain } from "class-transformer"
 
 import { getValidateAndTransformPipe as pipe, getResponseOptions as options } from "modules/commons"
+import { PermissionsGuard } from "modules/user"
 
 import { Parking } from "../entities"
 import { ExposeGroup } from "../models"
 import { ParkingByIdPipe } from "../pipes"
 import { ParkingService } from "../services"
 import { AuthGuard } from "@nestjs/passport"
+import { ParkingPermissions } from "../interfaces"
 
 @Controller("api/parkings")
 @ApiUseTags("parkings")
@@ -47,7 +49,7 @@ export class ParkingController {
   @ApiResponse({ status: HttpStatus.UNPROCESSABLE_ENTITY, description: "Validation error" })
   @ApiImplicitBody({ name: "Payload", type: Parking })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard("jwt"), new PermissionsGuard(ParkingPermissions.CREATE))
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async create(
     @Body(
@@ -69,7 +71,7 @@ export class ParkingController {
   @ApiImplicitParam({ name: "id", type: String })
   @ApiImplicitBody({ name: "Payload", type: Parking })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard("jwt"), new PermissionsGuard(ParkingPermissions.UPDATE))
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async update(
     @Param(ParkingByIdPipe) parking: Parking,
@@ -91,7 +93,7 @@ export class ParkingController {
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "Jwt malformed" })
   @ApiImplicitParam({ name: "id", type: String })
   @ApiImplicitHeader({ name: "Authorization", required: true })
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard("jwt"), new PermissionsGuard(ParkingPermissions.DELETE))
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async deleteById(@Param(ParkingByIdPipe) parking: Parking): Promise<string> {
     return this.parkingService.delete(parking)

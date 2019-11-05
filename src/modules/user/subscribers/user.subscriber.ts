@@ -5,6 +5,7 @@ import { hash } from "bcrypt"
 import { Config } from "modules/commons"
 
 import { User } from "../entities"
+import { permissions } from "./user-permissions"
 
 @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<User> {
@@ -22,7 +23,7 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
     if (event.entity.password) {
       event.entity.password = await hash(event.entity.password, this.saltRounds)
     }
-    event.entity.permissions = []
+    event.entity.permissions = permissions
     event.entity.createdAt = now
     event.entity.updatedAt = now
   }
