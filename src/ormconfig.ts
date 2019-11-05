@@ -12,7 +12,7 @@ const ormconfig: TypeOrmModuleOptions = {
   database: Config.get("TYPEORM_DATABASE"),
   entities: getMetadataArgsStorage().tables.map(tbl => tbl.target),
   subscribers: getMetadataArgsStorage().entitySubscribers.map(tbl => tbl.target),
-  synchronize: false,
+  synchronize: Config.getBoolean("TYPEORM_SYNCHRONIZE", false),
   logging: "all",
   keepConnectionAlive: true,
   migrations: [__dirname + "/migrations/**/*{.ts,.js}"],

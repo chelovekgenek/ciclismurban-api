@@ -3,13 +3,7 @@ import { Expose, Exclude, Type } from "class-transformer"
 
 import { SocialModel } from "./social.model"
 import { MergedPermissions } from "./merged-permissions"
-
-export enum ExposeGroup {
-  READ = "read",
-  WRITE = "write",
-  UPDATE = "update",
-  LOGIN = "login",
-}
+import { ExposeGroup } from "../interfaces"
 
 export class UserModel {
   @Expose({ groups: [ExposeGroup.READ] })
