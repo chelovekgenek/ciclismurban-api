@@ -42,6 +42,7 @@ export class AuthController {
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "Credentials are not valid" })
   @ApiImplicitBody({ name: "Auth body", type: User })
   @UseGuards(AuthGuard("local"))
+  @TransformClassToPlain(options([ExposeGroup.READ]))
   async login(@Request() req): Promise<AuthResponseDto> {
     return this.authService.pack(req.user)
   }
@@ -53,6 +54,7 @@ export class AuthController {
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "Jwt malformed" })
   @ApiImplicitHeader({ name: "Authorization", required: true, description: "Bearer token" })
   @UseGuards(AuthGuard("jwt"))
+  @TransformClassToPlain(options([ExposeGroup.READ]))
   async loginByToken(@Request() req): Promise<AuthResponseDto> {
     return this.authService.pack(req.user)
   }
@@ -64,6 +66,7 @@ export class AuthController {
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "token is wrong" })
   @ApiImplicitHeader({ name: "Authorization", required: true, description: "Bearer token" })
   @UseGuards(AuthGuard("google"))
+  @TransformClassToPlain(options([ExposeGroup.READ]))
   async loginByGoogle(@Request() req): Promise<AuthResponseDto> {
     return this.authService.pack(req.user)
   }
@@ -75,6 +78,7 @@ export class AuthController {
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "token is wrong" })
   @ApiImplicitHeader({ name: "Authorization", required: true, description: "Bearer token" })
   @UseGuards(AuthGuard("facebook"))
+  @TransformClassToPlain(options([ExposeGroup.READ]))
   async loginByFacebook(@Request() req): Promise<AuthResponseDto> {
     return this.authService.pack(req.user)
   }

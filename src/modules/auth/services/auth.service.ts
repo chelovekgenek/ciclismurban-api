@@ -23,14 +23,9 @@ export class AuthService {
 
   async pack(user: User): Promise<AuthResponseDto> {
     const payload: JwtPayload = { sub: user.uuid }
-    return plainToClass(
-      AuthResponseDto,
-      {
-        token: this.jwtService.sign(payload),
-        data: user,
-      },
-      { groups: [ExposeGroup.READ] },
-    )
+    return {
+      token: this.jwtService.sign(payload),
+    }
   }
 
   async validateUser(data: Pick<User, "email" | "password">) {

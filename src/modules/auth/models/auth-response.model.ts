@@ -1,12 +1,8 @@
-import { Expose, Type } from "class-transformer"
+import { Expose } from "class-transformer"
 
-import { ExposeGroup, UserModel } from "modules/user"
+import { ExposeGroup } from "../interfaces"
 
 export class AuthResponseModel {
   @Expose({ groups: [ExposeGroup.READ] })
   token: string
-
-  @Expose({ groups: [ExposeGroup.READ] })
-  @Type(() => UserModel)
-  data: UserModel
 }

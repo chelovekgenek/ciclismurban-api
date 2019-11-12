@@ -4,6 +4,7 @@ import { Expose, Exclude, Type } from "class-transformer"
 import { SocialModel } from "./social.model"
 import { MergedPermissions } from "./merged-permissions"
 import { ExposeGroup } from "../interfaces"
+import { ProfileModel } from "./profile.model"
 
 export class UserModel {
   @Expose({ groups: [ExposeGroup.READ] })
@@ -26,6 +27,10 @@ export class UserModel {
   @Exclude()
   @Type(() => SocialModel)
   social?: SocialModel
+
+  @Exclude()
+  @Type(() => ProfileModel)
+  profile: ProfileModel
 
   @Expose({ groups: [ExposeGroup.READ] })
   createdAt: Date

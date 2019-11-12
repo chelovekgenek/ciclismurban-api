@@ -4,6 +4,7 @@ import { ApiModelProperty } from "@nestjs/swagger"
 
 import { UserModel } from "../models"
 import { Social } from "./social.entity"
+import { Profile } from "./profile.entity"
 
 @Entity({ name: "users" })
 export class User extends UserModel {
@@ -39,6 +40,10 @@ export class User extends UserModel {
 
   @Column()
   social: Social
+
+  @Column()
+  @ApiModelProperty({ type: Profile, readOnly: true })
+  profile: Profile
 
   @CreateDateColumn()
   @ApiModelProperty({ type: String, format: "date-time", readOnly: true })
