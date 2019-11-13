@@ -9,15 +9,14 @@ import {
   ApiImplicitHeader,
 } from "@nestjs/swagger"
 import { TransformClassToPlain } from "class-transformer"
+import { LocationExposeGroup, ServicePermissions } from "@ciclismurban/models"
 
 import { getValidateAndTransformPipe as pipe, getResponseOptions as options } from "modules/commons"
 import { PermissionsGuard } from "modules/user"
 
-import { ExposeGroup } from "../models"
 import { ServiceService } from "../services"
 import { Service } from "../entities"
 import { ServiceByIdPipe } from "../pipes"
-import { ServicePermissions } from ".."
 
 @Controller("api/services")
 @ApiUseTags("services")
@@ -27,7 +26,7 @@ export class ServiceController {
   @Get()
   @ApiOperation({ title: "Get service locations" })
   @ApiResponse({ status: HttpStatus.OK, description: "OK", type: Service, isArray: true })
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async findAll(): Promise<Service[]> {
     return this.serviceService.find()
   }
@@ -37,7 +36,7 @@ export class ServiceController {
   @ApiResponse({ status: HttpStatus.OK, description: "OK", type: Service })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: "Entity not found" })
   @ApiImplicitParam({ name: "id", type: String })
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async findById(@Param(ServiceByIdPipe) service: Service): Promise<Service> {
     return service
   }
@@ -49,11 +48,11 @@ export class ServiceController {
   @ApiImplicitBody({ name: "Payload", type: Service })
   @ApiImplicitHeader({ name: "Authorization", required: true })
   @UseGuards(AuthGuard("jwt"), new PermissionsGuard(ServicePermissions.CREATE))
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async create(
     @Body(
       pipe(
-        [ExposeGroup.WRITE],
+        [LocationExposeGroup.WRITE],
         Service,
       ),
     )
@@ -71,12 +70,12 @@ export class ServiceController {
   @ApiImplicitBody({ name: "Payload", type: Service })
   @ApiImplicitHeader({ name: "Authorization", required: true })
   @UseGuards(AuthGuard("jwt"), new PermissionsGuard(ServicePermissions.UPDATE))
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async update(
     @Param(ServiceByIdPipe) service: Service,
     @Body(
       pipe(
-        [ExposeGroup.UPDATE],
+        [LocationExposeGroup.UPDATE],
         Service,
       ),
     )
@@ -93,7 +92,7 @@ export class ServiceController {
   @ApiImplicitParam({ name: "id", type: String })
   @ApiImplicitHeader({ name: "Authorization", required: true })
   @UseGuards(AuthGuard("jwt"), new PermissionsGuard(ServicePermissions.DELETE))
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async deleteById(@Param(ServiceByIdPipe) service: Service): Promise<string> {
     return this.serviceService.delete(service)
   }

@@ -1,7 +1,7 @@
 import { Entity, Column } from "typeorm"
 import { ApiModelProperty } from "@nestjs/swagger"
+import { ShopModel } from "@ciclismurban/models"
 
-import { ShopModel } from "../models"
 import { Location } from "./location.entity"
 import { WeeklySchedule } from "./misc.entity"
 

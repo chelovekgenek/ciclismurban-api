@@ -1,7 +1,7 @@
 import { Entity, Column } from "typeorm"
 import { ApiModelProperty } from "@nestjs/swagger"
+import { ServiceModel } from "@ciclismurban/models"
 
-import { ServiceModel } from "../models"
 import { Location } from "./location.entity"
 import { WeeklySchedule } from "./misc.entity"
 

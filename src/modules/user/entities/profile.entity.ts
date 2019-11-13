@@ -1,6 +1,5 @@
 import { Column } from "typeorm"
-
-import { ProfileModel } from "../models"
+import { ProfileModel } from "@ciclismurban/models"
 import { ApiModelProperty } from "@nestjs/swagger"
 
 export class Profile extends ProfileModel {

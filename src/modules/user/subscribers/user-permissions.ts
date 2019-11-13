@@ -1,4 +1,4 @@
-import { EventPermissions, ParkingPermissions, ServicePermissions, ShopPermissions } from "modules/location"
+import { EventPermissions, ParkingPermissions, ServicePermissions, ShopPermissions } from "@ciclismurban/models"
 
 export const permissions = [
   EventPermissions.CREATE,

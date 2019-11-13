@@ -1,6 +1,5 @@
 import { Column } from "typeorm"
-
-import { SocialModel } from "../models"
+import { SocialModel } from "@ciclismurban/models"
 
 export class Social extends SocialModel {
   @Column()

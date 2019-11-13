@@ -2,12 +2,14 @@ import { Controller, HttpStatus, HttpCode, Post, Body, UseGuards, Request } from
 import { AuthGuard } from "@nestjs/passport"
 import { ApiUseTags, ApiOperation, ApiResponse, ApiImplicitBody, ApiImplicitHeader } from "@nestjs/swagger"
 import { TransformClassToPlain } from "class-transformer"
+import { UserExposeGroup } from "@ciclismurban/models"
 
 import { getValidateAndTransformPipe as pipe, getResponseOptions as options } from "modules/commons"
-import { User, ExposeGroup } from "modules/user"
+import { User } from "modules/user"
 
 import { AuthResponseDto } from "../dto"
 import { AuthService } from "../services"
+import { ExposeGroup } from "../interfaces"
 
 @Controller("api/auth")
 @ApiUseTags("auth")
@@ -25,7 +27,7 @@ export class AuthController {
   async register(
     @Body(
       pipe(
-        [ExposeGroup.WRITE],
+        [UserExposeGroup.WRITE],
         User,
       ),
     )

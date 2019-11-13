@@ -24,6 +24,7 @@
     "migration:run": "yarn run typeorm migration:run"
   },
   "dependencies": {
+    "@ciclismurban/models": "1.1.1",
     "@moebius/http-graceful-shutdown": "^1.1.0",
     "@nestjs/common": "^6.0.0",
     "@nestjs/core": "^6.0.0",
@@ -92,14 +93,12 @@
     "*.{ts}": [
       "tslint -p tsconfig.json",
       "prettier --write",
-      "yarn test",
       "git add"
     ]
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && yarn test",
-      "pre-push": "yarn test"
+      "pre-commit": "lint-staged"
     }
   },
   "standard-version": {

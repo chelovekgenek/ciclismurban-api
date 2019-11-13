@@ -9,15 +9,14 @@ import {
   ApiImplicitHeader,
 } from "@nestjs/swagger"
 import { TransformClassToPlain } from "class-transformer"
+import { LocationExposeGroup, ShopPermissions } from "@ciclismurban/models"
 
 import { getValidateAndTransformPipe as pipe, getResponseOptions as options } from "modules/commons"
 import { PermissionsGuard } from "modules/user"
 
 import { Shop } from "../entities"
-import { ExposeGroup } from "../models"
 import { ShopService } from "../services"
 import { ShopByIdPipe } from "../pipes"
-import { ShopPermissions } from "../interfaces"
 
 @Controller("api/shops")
 @ApiUseTags("shops")
@@ -27,7 +26,7 @@ export class ShopController {
   @Get()
   @ApiOperation({ title: "Get shop locations" })
   @ApiResponse({ status: HttpStatus.OK, description: "OK", type: Shop, isArray: true })
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async findAll(): Promise<Shop[]> {
     return this.shopService.find()
   }
@@ -37,7 +36,7 @@ export class ShopController {
   @ApiResponse({ status: HttpStatus.OK, description: "OK", type: Shop })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: "Entity not found" })
   @ApiImplicitParam({ name: "id", type: String })
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async findById(@Param(ShopByIdPipe) shop: Shop): Promise<Shop> {
     return shop
   }
@@ -49,11 +48,11 @@ export class ShopController {
   @ApiImplicitBody({ name: "Payload", type: Shop })
   @ApiImplicitHeader({ name: "Authorization", required: true })
   @UseGuards(AuthGuard("jwt"), new PermissionsGuard(ShopPermissions.CREATE))
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async create(
     @Body(
       pipe(
-        [ExposeGroup.WRITE],
+        [LocationExposeGroup.WRITE],
         Shop,
       ),
     )
@@ -71,12 +70,12 @@ export class ShopController {
   @ApiImplicitBody({ name: "Payload", type: Shop })
   @ApiImplicitHeader({ name: "Authorization", required: true })
   @UseGuards(AuthGuard("jwt"), new PermissionsGuard(ShopPermissions.UPDATE))
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async update(
     @Param(ShopByIdPipe) shop: Shop,
     @Body(
       pipe(
-        [ExposeGroup.UPDATE],
+        [LocationExposeGroup.UPDATE],
         Shop,
       ),
     )
@@ -93,7 +92,7 @@ export class ShopController {
   @ApiImplicitParam({ name: "id", type: String })
   @ApiImplicitHeader({ name: "Authorization", required: true })
   @UseGuards(AuthGuard("jwt"), new PermissionsGuard(ShopPermissions.DELETE))
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async deleteById(@Param(ShopByIdPipe) shop: Shop): Promise<string> {
     return this.shopService.delete(shop)
   }

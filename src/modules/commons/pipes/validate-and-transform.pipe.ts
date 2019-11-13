@@ -3,8 +3,7 @@ import { isNil } from "@nestjs/common/utils/shared.utils"
 import { loadPackage } from "@nestjs/common/utils/load-package.util"
 import { ClassTransformOptions, plainToClass } from "class-transformer"
 import { validate, ValidatorOptions } from "class-validator"
-
-import { getFlatValidationErrors } from "../helpers"
+import { getFlatValidationErrors } from "@ciclismurban/models"
 
 export interface ValidateAndTransformPipeOptions {
   validator?: ValidatorOptions

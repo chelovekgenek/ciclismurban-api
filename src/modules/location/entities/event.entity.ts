@@ -1,7 +1,6 @@
 import { ApiModelProperty } from "@nestjs/swagger"
 import { Entity, Column } from "typeorm"
-
-import { EventModel } from "../models"
+import { EventModel } from "@ciclismurban/models"
 
 import { Location } from "./location.entity"
 

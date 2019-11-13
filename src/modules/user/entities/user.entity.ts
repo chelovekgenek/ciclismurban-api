@@ -1,8 +1,8 @@
 import { Column, Entity, ObjectIdColumn, Index, ObjectID, CreateDateColumn, UpdateDateColumn } from "typeorm"
 import { Exclude } from "class-transformer"
 import { ApiModelProperty } from "@nestjs/swagger"
+import { UserModel } from "@ciclismurban/models"
 
-import { UserModel } from "../models"
 import { Social } from "./social.entity"
 import { Profile } from "./profile.entity"
 

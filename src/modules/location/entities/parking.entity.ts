@@ -1,6 +1,5 @@
 import { Entity } from "typeorm"
-
-import { ParkingModel } from "../models"
+import { ParkingModel } from "@ciclismurban/models"
 
 import { Location } from "./location.entity"
 

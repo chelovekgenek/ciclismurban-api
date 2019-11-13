@@ -9,16 +9,15 @@ import {
   ApiImplicitHeader,
 } from "@nestjs/swagger"
 import { TransformClassToPlain } from "class-transformer"
+import { LocationExposeGroup, ParkingPermissions } from "@ciclismurban/models"
 
 import { getValidateAndTransformPipe as pipe, getResponseOptions as options } from "modules/commons"
 import { PermissionsGuard } from "modules/user"
 
 import { Parking } from "../entities"
-import { ExposeGroup } from "../models"
 import { ParkingByIdPipe } from "../pipes"
 import { ParkingService } from "../services"
 import { AuthGuard } from "@nestjs/passport"
-import { ParkingPermissions } from "../interfaces"
 
 @Controller("api/parkings")
 @ApiUseTags("parkings")
@@ -28,7 +27,7 @@ export class ParkingController {
   @Get()
   @ApiOperation({ title: "Get parking locations" })
   @ApiResponse({ status: HttpStatus.OK, description: "OK", type: Parking, isArray: true })
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async findAll(): Promise<Parking[]> {
     return this.parkingService.find()
   }
@@ -38,7 +37,7 @@ export class ParkingController {
   @ApiResponse({ status: HttpStatus.OK, description: "OK", type: Parking })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: "Entity not found" })
   @ApiImplicitParam({ name: "id", type: String })
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async findById(@Param(ParkingByIdPipe) parking: Parking): Promise<Parking> {
     return parking
   }
@@ -50,11 +49,11 @@ export class ParkingController {
   @ApiImplicitBody({ name: "Payload", type: Parking })
   @ApiImplicitHeader({ name: "Authorization", required: true })
   @UseGuards(AuthGuard("jwt"), new PermissionsGuard(ParkingPermissions.CREATE))
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async create(
     @Body(
       pipe(
-        [ExposeGroup.WRITE],
+        [LocationExposeGroup.WRITE],
         Parking,
       ),
     )
@@ -72,12 +71,12 @@ export class ParkingController {
   @ApiImplicitBody({ name: "Payload", type: Parking })
   @ApiImplicitHeader({ name: "Authorization", required: true })
   @UseGuards(AuthGuard("jwt"), new PermissionsGuard(ParkingPermissions.UPDATE))
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async update(
     @Param(ParkingByIdPipe) parking: Parking,
     @Body(
       pipe(
-        [ExposeGroup.UPDATE],
+        [LocationExposeGroup.UPDATE],
         Parking,
       ),
     )
@@ -94,7 +93,7 @@ export class ParkingController {
   @ApiImplicitParam({ name: "id", type: String })
   @ApiImplicitHeader({ name: "Authorization", required: true })
   @UseGuards(AuthGuard("jwt"), new PermissionsGuard(ParkingPermissions.DELETE))
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async deleteById(@Param(ParkingByIdPipe) parking: Parking): Promise<string> {
     return this.parkingService.delete(parking)
   }

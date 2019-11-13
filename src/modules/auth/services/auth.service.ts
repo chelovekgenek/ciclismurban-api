@@ -1,9 +1,8 @@
 import { JwtService } from "@nestjs/jwt"
 import { Injectable, ConflictException } from "@nestjs/common"
-import { plainToClass } from "class-transformer"
 import bcrypt from "bcrypt"
 
-import { User, ExposeGroup, UserService } from "modules/user"
+import { User, UserService } from "modules/user"
 
 import { JwtPayload, SocialPayload } from "../interfaces"
 import { AuthResponseDto } from "../dto"

@@ -9,15 +9,14 @@ import {
   ApiImplicitHeader,
 } from "@nestjs/swagger"
 import { TransformClassToPlain } from "class-transformer"
+import { LocationExposeGroup, EventPermissions } from "@ciclismurban/models"
 
 import { getValidateAndTransformPipe as pipe, getResponseOptions as options } from "modules/commons"
 import { PermissionsGuard } from "modules/user"
 
 import { Event } from "../entities"
-import { ExposeGroup } from "../models"
 import { EventService } from "../services"
 import { EventByIdPipe } from "../pipes"
-import { EventPermissions } from "../interfaces"
 
 @Controller("api/events")
 @ApiUseTags("events")
@@ -27,7 +26,7 @@ export class EventController {
   @Get()
   @ApiOperation({ title: "Get event locations" })
   @ApiResponse({ status: HttpStatus.OK, description: "OK", type: Event, isArray: true })
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async findAll(): Promise<Event[]> {
     return this.eventService.find()
   }
@@ -37,7 +36,7 @@ export class EventController {
   @ApiResponse({ status: HttpStatus.OK, description: "OK", type: Event })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: "Entity not found" })
   @ApiImplicitParam({ name: "id", type: String })
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async findById(@Param(EventByIdPipe) event: Event): Promise<Event> {
     return event
   }
@@ -50,11 +49,11 @@ export class EventController {
   @ApiImplicitBody({ name: "Payload", type: Event })
   @ApiImplicitHeader({ name: "Authorization", required: true })
   @UseGuards(AuthGuard("jwt"), new PermissionsGuard(EventPermissions.CREATE))
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async create(
     @Body(
       pipe(
-        [ExposeGroup.WRITE],
+        [LocationExposeGroup.WRITE],
         Event,
       ),
     )
@@ -72,12 +71,12 @@ export class EventController {
   @ApiImplicitBody({ name: "Payload", type: Event })
   @ApiImplicitHeader({ name: "Authorization", required: true })
   @UseGuards(AuthGuard("jwt"), new PermissionsGuard(EventPermissions.UPDATE))
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async update(
     @Param(EventByIdPipe) event: Event,
     @Body(
       pipe(
-        [ExposeGroup.UPDATE],
+        [LocationExposeGroup.UPDATE],
         Event,
       ),
     )
@@ -94,7 +93,7 @@ export class EventController {
   @ApiImplicitParam({ name: "id", type: String })
   @ApiImplicitHeader({ name: "Authorization", required: true })
   @UseGuards(AuthGuard("jwt"), new PermissionsGuard(EventPermissions.DELETE))
-  @TransformClassToPlain(options([ExposeGroup.READ]))
+  @TransformClassToPlain(options([LocationExposeGroup.READ]))
   async deleteById(@Param(EventByIdPipe) event: Event): Promise<string> {
     return this.eventService.delete(event)
   }

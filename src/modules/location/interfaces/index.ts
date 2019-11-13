@@ -1,5 +1,2 @@
 export * from "./event.interface"
-export * from "./parking.interface"
-export * from "./service.interface"
-export * from "./shop.interface"
 export * from "./location.interface"
