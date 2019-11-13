@@ -7,13 +7,13 @@ workflows:
   build-deploy:
     jobs:
       - common/build
-      - common/test:
-          requires:
-            - common/build
+      # - common/test:
+      #     requires:
+      #       - common/build
       - common/deploy-master:
           requires:
             - common/build
-            - common/test
+            # - common/test
           filters:
             branches:
               only: master
