@@ -8,7 +8,7 @@ import { getResponseOptions as options } from "modules/commons"
 
 import { User } from "../entities"
 
-@Controller("me")
+@Controller("api/me")
 @ApiUseTags("users")
 export class MeUserController {
   @Get()
