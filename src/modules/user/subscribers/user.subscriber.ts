@@ -23,6 +23,7 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
     if (event.entity.password) {
       event.entity.password = await hash(event.entity.password, this.saltRounds)
     }
+    event.entity.profile = {}
     event.entity.permissions = permissions
     event.entity.createdAt = now
     event.entity.updatedAt = now

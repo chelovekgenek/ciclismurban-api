@@ -1,7 +1,10 @@
 import { Injectable } from "@nestjs/common"
+import { merge } from "lodash/fp"
 
 import { UserRepository } from "../repositories"
-import { User } from "../entities"
+import { User, Profile } from "../entities"
+import { plainToClass } from "class-transformer"
+import { UserExposeGroup } from "@ciclismurban/models"
 
 @Injectable()
 export class UserService {
@@ -18,5 +21,10 @@ export class UserService {
 
   async findOneByEmail(email: string): Promise<User> {
     return this.userRepository.findOneOrFail({ email })
+  }
+
+  async updateProfile(user: User, profile: Partial<Profile>): Promise<User> {
+    const merged = this.userRepository.merge(user, { profile: merge(user.profile, profile) })
+    return this.userRepository.save(merged)
   }
 }

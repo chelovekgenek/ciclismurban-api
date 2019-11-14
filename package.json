@@ -24,7 +24,7 @@
     "migration:run": "yarn run typeorm migration:run"
   },
   "dependencies": {
-    "@ciclismurban/models": "1.1.1",
+    "@ciclismurban/models": "1.2.1",
     "@moebius/http-graceful-shutdown": "^1.1.0",
     "@nestjs/common": "^6.0.0",
     "@nestjs/core": "^6.0.0",
@@ -51,9 +51,6 @@
     "aws-sdk": "^2.504.0",
     "bcrypt": "^3.0.6",
     "chalk": "^2.4.2",
-    "class-transformer": "^0.2.3",
-    "class-transformer-validator": "^0.7.1",
-    "class-validator": "^0.9.1",
     "dotenv": "^8.0.0",
     "dotenv-safe": "^6.1.0",
     "fb": "^2.0.0",
@@ -88,6 +85,11 @@
     "ts-loader": "^6.0.4",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0"
+  },
+  "peerDependencies": {
+    "class-transformer": "^0.2.3",
+    "class-transformer-validator": "^0.8.0",
+    "class-validator": "^0.11.0"
   },
   "lint-staged": {
     "*.{ts}": [

@@ -1,7 +1,7 @@
 import { Column, Entity, ObjectIdColumn, Index, ObjectID, CreateDateColumn, UpdateDateColumn } from "typeorm"
-import { Exclude } from "class-transformer"
+import { Exclude, Type } from "class-transformer"
 import { ApiModelProperty } from "@nestjs/swagger"
-import { UserModel } from "@ciclismurban/models"
+import { UserModel, ProfileModel } from "@ciclismurban/models"
 
 import { Social } from "./social.entity"
 import { Profile } from "./profile.entity"
@@ -43,7 +43,7 @@ export class User extends UserModel {
 
   @Column()
   @ApiModelProperty({ type: Profile, readOnly: true })
-  profile: Profile
+  profile: Partial<Profile>
 
   @CreateDateColumn()
   @ApiModelProperty({ type: String, format: "date-time", readOnly: true })

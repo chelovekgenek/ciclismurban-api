@@ -4,18 +4,18 @@ import { ApiModelProperty } from "@nestjs/swagger"
 
 export class Profile extends ProfileModel {
   @Column()
-  @ApiModelProperty({ type: String, readOnly: true })
+  @ApiModelProperty({ type: String })
   avatar: string
 
   @Column()
-  @ApiModelProperty({ type: String, readOnly: true })
+  @ApiModelProperty({ type: String })
   description: string
 
   @Column()
-  @ApiModelProperty({ type: String, readOnly: true })
+  @ApiModelProperty({ type: String })
   facebook: string
 
   @Column()
-  @ApiModelProperty({ type: String, readOnly: true })
+  @ApiModelProperty({ type: String })
   telegram: string
 }
