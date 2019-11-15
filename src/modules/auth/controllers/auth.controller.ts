@@ -4,7 +4,7 @@ import { ApiUseTags, ApiOperation, ApiResponse, ApiImplicitBody, ApiImplicitHead
 import { TransformClassToPlain } from "class-transformer"
 import { UserExposeGroup } from "@ciclismurban/models"
 
-import { getValidateAndTransformPipe as pipe, getResponseOptions as options } from "modules/commons"
+import { getValidateAndTransformPipe as pipe, getResponseOptions as options, ApiAuthPayload } from "modules/commons"
 import { User } from "modules/user"
 
 import { AuthResponseDto } from "../dto"
@@ -53,9 +53,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ title: "Login User by existing JWT token as Bearer token" })
   @ApiResponse({ status: HttpStatus.OK, description: "OK", type: AuthResponseDto })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: "Jwt malformed" })
-  @ApiImplicitHeader({ name: "Authorization", required: true, description: "Bearer token" })
-  @UseGuards(AuthGuard("jwt"))
+  @ApiAuthPayload()
   @TransformClassToPlain(options([ExposeGroup.READ]))
   async loginByToken(@Request() req): Promise<AuthResponseDto> {
     return this.authService.pack(req.user)

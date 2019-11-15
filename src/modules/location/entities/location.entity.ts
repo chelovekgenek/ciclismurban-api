@@ -25,6 +25,15 @@ export function Location<T extends Constructor<{}>>(SuperClass: T) {
     uuid: string
 
     @Column()
+    @ApiModelProperty({
+      type: String,
+      readOnly: true,
+      format: "uuid",
+      description: "uuid v4; relation to user record",
+    })
+    userId: string
+
+    @Column()
     @ApiModelProperty({ type: String })
     title: string
 
@@ -41,11 +50,11 @@ export function Location<T extends Constructor<{}>>(SuperClass: T) {
     point: Point
 
     @CreateDateColumn()
-    @ApiModelProperty({ type: String })
+    @ApiModelProperty({ type: String, readOnly: true })
     createdAt: Date
 
     @UpdateDateColumn()
-    @ApiModelProperty({ type: String })
+    @ApiModelProperty({ type: String, readOnly: true })
     updatedAt: Date
   }
   return LocalClass

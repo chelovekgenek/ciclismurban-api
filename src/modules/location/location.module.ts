@@ -2,11 +2,10 @@ import { Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { ClientsModule, Transport } from "@nestjs/microservices"
 
-import { UserModule } from "modules/user"
 import { Config } from "modules/commons"
 import { LoggerModule, LoggerService } from "modules/logger"
 
-import { Parking, Service, Shop } from "./entities"
+import { Event, Parking, Service, Shop } from "./entities"
 import {
   EventRepositoryProvider,
   ParkingRepositoryProvider,
@@ -14,13 +13,22 @@ import {
   ShopRepositoryProvider,
 } from "./repositories"
 import { EventSubscriber, ParkingSubscriber, ServiceSubscriber, ShopSubscriber } from "./subscribers"
-import { EventController, ParkingController, ServiceController, ShopController } from "./controllers"
+import {
+  EventController,
+  ParkingController,
+  ServiceController,
+  ShopController,
+  MeEventController,
+  MeParkingController,
+  MeServiceController,
+  MeShopController,
+} from "./controllers"
 import { EventService, ParkingService, ServiceService, ShopService } from "./services"
 import { MESSAGE_SERVICE } from "./interfaces"
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Parking, Service, Shop]),
+    TypeOrmModule.forFeature([Event, Parking, Service, Shop]),
     ClientsModule.register([
       {
         name: MESSAGE_SERVICE,
@@ -32,7 +40,6 @@ import { MESSAGE_SERVICE } from "./interfaces"
       },
     ]),
     LoggerModule,
-    UserModule,
   ],
   providers: [
     EventRepositoryProvider,
@@ -49,6 +56,15 @@ import { MESSAGE_SERVICE } from "./interfaces"
     ShopService,
     LoggerService,
   ],
-  controllers: [EventController, ParkingController, ServiceController, ShopController],
+  controllers: [
+    EventController,
+    ParkingController,
+    ServiceController,
+    ShopController,
+    MeEventController,
+    MeParkingController,
+    MeServiceController,
+    MeShopController,
+  ],
 })
 export class LocationModule {}

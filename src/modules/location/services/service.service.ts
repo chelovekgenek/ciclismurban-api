@@ -1,5 +1,7 @@
 import { Injectable } from "@nestjs/common"
 
+import { User } from "modules/user"
+
 import { ServiceRepository } from "../repositories"
 import { Service } from "../entities"
 
@@ -15,16 +17,23 @@ export class ServiceService {
     return this.serviceRepository.findOneOrFail({ uuid })
   }
 
-  async create(data: Partial<Service>): Promise<Service> {
-    return this.serviceRepository.save(data)
+  async findByIds(userId: Service["userId"], uuid: Service["uuid"]): Promise<Service> {
+    return this.serviceRepository.findOneOrFail({ uuid, userId })
   }
 
-  async update(parking: Service, data: Partial<Service>): Promise<Service> {
-    return this.serviceRepository.save(this.serviceRepository.merge(parking, data))
+  async create(user: User, data: Partial<Service>): Promise<Service> {
+    const service = this.serviceRepository.create({ userId: user.uuid, ...data })
+    return this.serviceRepository.save(service)
   }
 
-  async delete(parking: Service): Promise<string> {
-    await this.serviceRepository.deleteOne(parking)
-    return parking.uuid
+  async update(userId: Service["userId"], serviceId: Service["uuid"], data: Partial<Service>): Promise<Service> {
+    const service = await this.findByIds(userId, serviceId)
+    return this.serviceRepository.save(this.serviceRepository.merge(service, data))
+  }
+
+  async delete(userId: Service["userId"], serviceId: Service["uuid"]): Promise<string> {
+    const service = await this.findByIds(userId, serviceId)
+    await this.serviceRepository.deleteOne(service)
+    return service.uuid
   }
 }

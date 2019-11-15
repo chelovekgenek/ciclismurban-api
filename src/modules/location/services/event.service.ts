@@ -5,6 +5,7 @@ import { LocationExposeGroup } from "@ciclismurban/models"
 
 import { getResponseOptions as options } from "modules/commons"
 import { LoggerService } from "modules/logger"
+import { User } from "modules/user"
 
 import { EventRepository } from "../repositories"
 import { Event } from "../entities"
@@ -34,19 +35,26 @@ export class EventService implements OnModuleInit {
     return this.eventRepository.findOneOrFail({ uuid })
   }
 
-  async create(data: Partial<Event>): Promise<Event> {
-    const event = await this.eventRepository.save(data)
+  async findByIds(userId: Event["userId"], uuid: Event["uuid"]): Promise<Event> {
+    return this.eventRepository.findOneOrFail({ uuid, userId })
+  }
+
+  async create(user: User, data: Partial<Event>): Promise<Event> {
+    const event = this.eventRepository.create({ userId: user.uuid, ...data })
+    const record = await this.eventRepository.save(event)
     process.nextTick(() => {
-      this.client.emit(EventTypes.CREATED, classToPlain(event, options([LocationExposeGroup.READ]))).toPromise()
+      this.client.emit(EventTypes.CREATED, classToPlain(record, options([LocationExposeGroup.READ]))).toPromise()
     })
     return event
   }
 
-  async update(event: Event, data: Partial<Event>): Promise<Event> {
+  async update(userId: Event["userId"], eventId: Event["uuid"], data: Partial<Event>): Promise<Event> {
+    const event = await this.findByIds(userId, eventId)
     return this.eventRepository.save(this.eventRepository.merge(event, data))
   }
 
-  async delete(event: Event): Promise<string> {
+  async delete(userId: Event["userId"], eventId: Event["uuid"]): Promise<string> {
+    const event = await this.findByIds(userId, eventId)
     await this.eventRepository.deleteOne(event)
     return event.uuid
   }
