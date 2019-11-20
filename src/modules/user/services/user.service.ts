@@ -5,6 +5,7 @@ import { UserRepository } from "../repositories"
 import { User, Profile } from "../entities"
 import { plainToClass } from "class-transformer"
 import { UserExposeGroup } from "@ciclismurban/models"
+import { Point } from "modules/commons/entities"
 
 @Injectable()
 export class UserService {
@@ -25,6 +26,11 @@ export class UserService {
 
   async updateProfile(user: User, profile: Partial<Profile>): Promise<User> {
     const merged = this.userRepository.merge(user, { profile: merge(user.profile, profile) })
+    return this.userRepository.save(merged)
+  }
+
+  async updatePosition(user: User, position: Point): Promise<User> {
+    const merged = this.userRepository.merge(user, { position: merge(user.position, position) })
     return this.userRepository.save(merged)
   }
 }

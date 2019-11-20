@@ -1,4 +1,4 @@
-import { Controller, HttpStatus, Get, Request, Patch, Body } from "@nestjs/common"
+import { Controller, HttpStatus, Get, Request, Patch, Body, Post, Put } from "@nestjs/common"
 import { ApiOperation, ApiUseTags, ApiResponse } from "@nestjs/swagger"
 import { TransformClassToPlain } from "class-transformer"
 import { UserExposeGroup } from "@ciclismurban/models"
@@ -13,6 +13,7 @@ import {
 
 import { User, Profile } from "../entities"
 import { UserService } from "../services"
+import { Point } from "modules/commons/entities"
 
 @Controller("api/me")
 @ApiUseTags("users")
@@ -35,14 +36,21 @@ export class MeUserController {
   @TransformClassToPlain(options([UserExposeGroup.READ]))
   async updateMeProfile(
     @Request() { user }: AuthenticatedRequest,
-    @Body(
-      pipe(
-        [UserExposeGroup.UPDATE],
-        Profile,
-      ),
-    )
-    profile: Partial<Profile>,
+    @Body(pipe([UserExposeGroup.UPDATE], Profile)) profile: Partial<Profile>,
   ): Promise<User> {
     return this.userService.updateProfile(user, profile)
+  }
+
+  @Put("/position")
+  @ApiOperation({ title: "Create or update my User position record" })
+  @ApiResponse({ status: HttpStatus.OK, description: "OK", type: User })
+  @ApiAuthPayload()
+  @ApiBodyValidation(Point)
+  @TransformClassToPlain(options([UserExposeGroup.READ]))
+  async updateMePosition(
+    @Request() { user }: AuthenticatedRequest,
+    @Body(pipe([UserExposeGroup.UPDATE], Point)) position: Point,
+  ): Promise<User> {
+    return this.userService.updatePosition(user, position)
   }
 }

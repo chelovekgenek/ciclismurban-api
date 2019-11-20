@@ -22,7 +22,7 @@
     "migration:run": "yarn run typeorm migration:run"
   },
   "dependencies": {
-    "@ciclismurban/models": "1.4.0",
+    "@ciclismurban/models": "1.5.2",
     "@moebius/http-graceful-shutdown": "^1.1.0",
     "@nestjs/common": "^6.0.0",
     "@nestjs/core": "^6.0.0",

@@ -1,16 +1,6 @@
 import { Column } from "typeorm"
 import { ApiModelProperty } from "@nestjs/swagger"
-import { PointModel, WeeklyScheduleModel, DailyScheduleItemModel } from "@ciclismurban/models"
-
-export class Point extends PointModel {
-  @Column()
-  @ApiModelProperty({ type: Number })
-  lat: number
-
-  @Column()
-  @ApiModelProperty({ type: Number })
-  lng: number
-}
+import { WeeklyScheduleModel, DailyScheduleItemModel } from "@ciclismurban/models"
 
 export class DailySchedule extends DailyScheduleItemModel {
   @Column()

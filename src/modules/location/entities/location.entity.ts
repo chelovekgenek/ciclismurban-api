@@ -3,7 +3,7 @@ import { ApiModelProperty } from "@nestjs/swagger"
 import { Exclude } from "class-transformer"
 
 import { Constructor } from "modules/commons"
-import { Point } from "./misc.entity"
+import { Point } from "modules/commons/entities"
 
 export function Location<T extends Constructor<{}>>(SuperClass: T) {
   class LocalClass extends SuperClass {

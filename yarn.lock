@@ -137,10 +137,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@ciclismurban/models@1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@ciclismurban/models/-/models-1.4.0.tgz#2fea88dc2619c6a336c7d8487060807407a58fff"
-  integrity sha512-UrjQtXr9vVZ01VVkdjmh7qsldsk9cLkiMlHtGsS5D5xcTML4pOe2htkFRMHfP1gNab47m3P/UOSBqFIJfVEHqw==
+"@ciclismurban/models@1.5.2":
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/@ciclismurban/models/-/models-1.5.2.tgz#ef4fa1210e2b39d9fbeaa2dd61e7fa8f48f35ec1"
+  integrity sha512-j0DLrTikvtX5IFg8y58stQkrISFGrKHuUiGBVqcBtaYLTJoS0CQYxb/nkY17MFjgboqVTMrA9krZ8D+GodQE0A==
   dependencies:
     class-transformer "^0.2.3"
     class-transformer-validator "^0.8.0"
