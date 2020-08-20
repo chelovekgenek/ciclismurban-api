@@ -47,7 +47,7 @@
     "amqp-connection-manager": "^3.0.0",
     "amqplib": "^0.5.5",
     "aws-sdk": "^2.504.0",
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "chalk": "^2.4.2",
     "dotenv": "^8.0.0",
     "dotenv-safe": "^6.1.0",
